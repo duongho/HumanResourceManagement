@@ -7,5 +7,7 @@ import com.ksu.grad.entity.Person;
 public interface PersonService {
 	
 	List<Person> getAllEmployees();
+	
+	boolean registerNewEmployee(Person p) throws Exception;
 
 }

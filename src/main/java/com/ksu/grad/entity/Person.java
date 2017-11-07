@@ -26,6 +26,8 @@ public class Person implements Serializable{
 	
 	private String userName;
 	
+	private String password;
+	
 	public void setId(int id){
 		this.id = id;
 	}
@@ -62,4 +64,12 @@ public class Person implements Serializable{
 		return userName;
 	}
 
+	public void setPassword(String password){
+		this.password = password;
+	}
+	
+	@Column(name="Password")
+	public String getPassword(){
+		return password;
+	}
 }

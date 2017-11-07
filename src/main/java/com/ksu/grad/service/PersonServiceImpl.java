@@ -19,4 +19,9 @@ public class PersonServiceImpl implements PersonService{
 		return personDAO.getAllEmployees();
 	}
 
+	@Override
+	public boolean registerNewEmployee(Person p) throws Exception {
+		return personDAO.registerNewEmployee(p);
+	}
+
 }

@@ -8,4 +8,7 @@ public interface PersonDAO {
 
 	List<Person> getAllEmployees();
 	
+	//return success/failure
+	boolean registerNewEmployee(Person p) throws Exception;
+	
 }
