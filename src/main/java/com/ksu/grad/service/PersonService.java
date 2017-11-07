@@ -9,5 +9,4 @@ public interface PersonService {
 	List<Person> getAllEmployees();
 	
 	boolean registerNewEmployee(Person p) throws Exception;
-
 }
