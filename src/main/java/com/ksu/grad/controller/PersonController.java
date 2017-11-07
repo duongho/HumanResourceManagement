@@ -32,6 +32,7 @@ public class PersonController {
 	
 	@GetMapping("hello")
 	public ResponseEntity<String> sayHello(){
+		System.out.println("-----helloooooooo---------");
 		return new ResponseEntity<String>("Hello", HttpStatus.OK);
 	}
 	
