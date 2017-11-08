@@ -23,10 +23,10 @@ public class PersonDAOImpl implements PersonDAO {
 	private static final Logger LOGGER = Logger.getLogger(PersonDAOImpl.class);
 	
 	private static final String SELECT_ALL_EMPLOYEES = 
-			"SELECT a.id, a.firstname, a.lastname, a.username FROM EMAS.PERSON a";
+			"SELECT a.id, a.firstname, a.lastname, a.username, a.emailaddress, a.password FROM EMAS.PERSON a";
 	
 	private static final String REGISTER_NEW_USER=
-			"INSERT INTO EMAS.PERSON (FIRSTNAME, LASTNAME, EMAILADDRESS, PASSWORD) VALUES (?,?,?,?)";
+			"INSERT INTO EMAS.PERSON (FIRSTNAME, LASTNAME, USERNAME, EMAILADDRESS, PASSWORD) VALUES (?,?,?,?,?)";
 	
 	/**
 	 * get back all employees that are in the employee tables
@@ -52,7 +52,7 @@ public class PersonDAOImpl implements PersonDAO {
 		boolean b = true;
 		
 		//TODO: Sindhu, please check for all attributes when register a new user
-		if(p.getFirstName() == null || p.getLastName() == null || p.getUserName() == null) {
+		if(p.getFirstName() == null || p.getLastName() == null) {
 			LOGGER.error("Can not register a new employee. First name or last name or username must not be null");
 			b = false;
 		}
@@ -60,14 +60,18 @@ public class PersonDAOImpl implements PersonDAO {
 		//auto generate email
 		String emailAddress = p.getFirstName() + "_" + p.getLastName() + "@ksu.edu";
 		
+		//in a corporate office the email address is really the username
+		String username = emailAddress;
+		
 		String password = new BCryptPasswordEncoder().encode(p.getPassword());
 		
 		try{
 			Query q = entityManager.createNativeQuery(REGISTER_NEW_USER);
 			q.setParameter(1, p.getFirstName());
 			q.setParameter(2, p.getLastName());
-			q.setParameter(3, emailAddress);
-			q.setParameter(4, password);
+			q.setParameter(3, username);
+			q.setParameter(4, emailAddress);
+			q.setParameter(5, password);
 			
 			q.executeUpdate();
 		} catch (Exception e){
@@ -77,8 +81,4 @@ public class PersonDAOImpl implements PersonDAO {
 		
 		return b;
 	}
-	
-
-	
-
 }

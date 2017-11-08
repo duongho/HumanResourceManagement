@@ -11,4 +11,10 @@ public class HumanResourceManagementApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(HumanResourceManagementApplication.class, args);
 	}
+	
+	
+	 @Bean
+	 public BCryptPasswordEncoder bCryptPasswordEncoder() {
+	        return new BCryptPasswordEncoder();
+	 }
 }

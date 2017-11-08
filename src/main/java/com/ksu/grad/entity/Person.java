@@ -24,9 +24,11 @@ public class Person implements Serializable{
 	
 	private String lastName;
 	
-	private String userName;
+	private String username;
 	
 	private String password;
+	
+	private String emailAddress;
 	
 	public void setId(int id){
 		this.id = id;
@@ -55,15 +57,6 @@ public class Person implements Serializable{
 		return lastName;
 	}
 	
-	public void setUserName(String userName){
-		this.userName = userName;
-	}
-	
-	@Column(name="UserName")
-	public String getUserName(){
-		return userName;
-	}
-
 	public void setPassword(String password){
 		this.password = password;
 	}
@@ -71,5 +64,23 @@ public class Person implements Serializable{
 	@Column(name="Password")
 	public String getPassword(){
 		return password;
+	}
+
+	@Column(name="EmailAddress")
+	public String getEmailAddress() {
+		return emailAddress;
+	}
+
+	public void setEmailAddress(String emailAddress) {
+		this.emailAddress = emailAddress;
+	}
+	
+	@Column(name="UserName")
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 }
