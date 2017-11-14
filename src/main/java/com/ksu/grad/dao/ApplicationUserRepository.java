@@ -2,8 +2,8 @@ package com.ksu.grad.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.ksu.grad.entity.Person;
+import com.ksu.grad.entity.Login;
 
-public interface ApplicationUserRepository extends JpaRepository<Person, Long> {
-    Person findByusername(String userName);
+public interface ApplicationUserRepository extends JpaRepository<Login, Long> {
+	Login findByUserName(String UserName);
 }

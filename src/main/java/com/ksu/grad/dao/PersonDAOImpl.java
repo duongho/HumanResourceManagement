@@ -8,10 +8,10 @@ import javax.persistence.Query;
 import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import com.ksu.grad.entity.Person;
+import com.ksu.grad.service.convertors.ListConverter;
 
 @Transactional
 @Repository
@@ -23,10 +23,14 @@ public class PersonDAOImpl implements PersonDAO {
 	private static final Logger LOGGER = Logger.getLogger(PersonDAOImpl.class);
 	
 	private static final String SELECT_ALL_EMPLOYEES = 
-			"SELECT a.id, a.firstname, a.lastname, a.username, a.emailaddress, a.password FROM EMAS.PERSON a";
+			"SELECT a.ID, a.FirstName, a.LastName, a.EmailAddress, a.Phone FROM EMAS.Person a";
 	
 	private static final String REGISTER_NEW_USER=
-			"INSERT INTO EMAS.PERSON (FIRSTNAME, LASTNAME, USERNAME, EMAILADDRESS, PASSWORD) VALUES (?,?,?,?,?)";
+			"INSERT INTO EMAS.Person (FirstName, LastName, EmailAddress, Phone) VALUES (?,?,?,?)";
+	  
+	  
+	  
+	
 	
 	/**
 	 * get back all employees that are in the employee tables
@@ -35,7 +39,7 @@ public class PersonDAOImpl implements PersonDAO {
 	public List<Person> getAllEmployees() {
 
 		Query q = entityManager.createNativeQuery(SELECT_ALL_EMPLOYEES, Person.class);
-		List<Person> employees = q.getResultList();
+		List<Person> employees = ListConverter.castList(Person.class, q.getResultList());
 		 return employees;
 	}
 	
@@ -53,7 +57,7 @@ public class PersonDAOImpl implements PersonDAO {
 		
 		//TODO: Sindhu, please check for all attributes when register a new user
 		if(p.getFirstName() == null || p.getLastName() == null) {
-			LOGGER.error("Can not register a new employee. First name or last name or username must not be null");
+			LOGGER.error("Can not register a new employee. First name or last name must not be null");
 			b = false;
 		}
 		
@@ -61,17 +65,16 @@ public class PersonDAOImpl implements PersonDAO {
 		String emailAddress = p.getFirstName() + "_" + p.getLastName() + "@ksu.edu";
 		
 		//in a corporate office the email address is really the username
-		String username = emailAddress;
+		//String username = emailAddress;
 		
-		String password = new BCryptPasswordEncoder().encode(p.getPassword());
+		//String password = new BCryptPasswordEncoder().encode(p.getPassword());
 		
 		try{
 			Query q = entityManager.createNativeQuery(REGISTER_NEW_USER);
 			q.setParameter(1, p.getFirstName());
 			q.setParameter(2, p.getLastName());
-			q.setParameter(3, username);
-			q.setParameter(4, emailAddress);
-			q.setParameter(5, password);
+			q.setParameter(3, emailAddress);
+			q.setParameter(4, p.getPhone());
 			
 			q.executeUpdate();
 		} catch (Exception e){

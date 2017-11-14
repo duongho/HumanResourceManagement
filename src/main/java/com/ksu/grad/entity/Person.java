@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="EMAS.PERSON")
+@Table(name="EMAS.Person")
 public class Person implements Serializable{
 
 	private static final long serialVersionUID = 4504281361979239496L;
@@ -20,15 +20,13 @@ public class Person implements Serializable{
 	@GeneratedValue(strategy=GenerationType.TABLE)
 	private int id;
 	
-	private String firstName;
+	private String FirstName;
 	
-	private String lastName;
+	private String LastName;
 	
-	private String username;
+	private String EmailAddress;
 	
-	private String password;
-	
-	private String emailAddress;
+	private String Phone;
 	
 	public void setId(int id){
 		this.id = id;
@@ -40,47 +38,38 @@ public class Person implements Serializable{
 	}
 	
 	public void setFirstName(String firstName){
-		this.firstName = firstName;
+		this.FirstName = firstName;
 	}
 	
 	@Column(name="FirstName")
 	public String getFirstName(){
-		return firstName;
+		return this.FirstName;
 	}
 	
 	public void getLastName(String lastName){
-		this.lastName = lastName;
+		this.LastName = lastName;
 	}
 	
 	@Column(name="LastName")
 	public String getLastName(){
-		return lastName;
+		return this.LastName;
 	}
-	
-	public void setPassword(String password){
-		this.password = password;
-	}
-	
-	@Column(name="Password")
-	public String getPassword(){
-		return password;
+
+	public void setEmailAddress(String emailAddress) {
+		this.EmailAddress = emailAddress;
 	}
 
 	@Column(name="EmailAddress")
 	public String getEmailAddress() {
-		return emailAddress;
+		return this.EmailAddress;
 	}
 
-	public void setEmailAddress(String emailAddress) {
-		this.emailAddress = emailAddress;
-	}
-	
-	@Column(name="UserName")
-	public String getUsername() {
-		return username;
+	@Column(name="Phone")
+	public String getPhone() {
+		return this.Phone;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setPhone(String phone) {
+		this.Phone = phone;
 	}
 }

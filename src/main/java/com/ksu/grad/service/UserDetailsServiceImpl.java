@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.ksu.grad.dao.ApplicationUserRepository;
-import com.ksu.grad.entity.Person;
+import com.ksu.grad.entity.Login;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -22,12 +22,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 	    @Override
 	    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-	        Person applicationUser = applicationUserRepository.findByusername(username);
+	        Login applicationUser = applicationUserRepository.findByUserName(username);
 	        if (applicationUser == null) {
 	            throw new UsernameNotFoundException(username);
 	        }
 	        
 	        
-	        return new User(applicationUser.getUsername(), applicationUser.getPassword(), Collections.emptyList());
+	        return new User(applicationUser.getUserName(), applicationUser.getPassword(), Collections.emptyList());
 	    }
 }
