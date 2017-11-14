@@ -17,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -51,11 +52,24 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             FilterChain chain,
                                             Authentication auth) throws IOException, ServletException {
 
+    	User user = (User) auth.getPrincipal();
+    	
         String token = Jwts.builder()
-                .setSubject(((User) auth.getPrincipal()).getUsername())
+                .setSubject(user.getUsername())
                 .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS512, SecurityConstants.SECRET.getBytes())
                 .compact();
         res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
+        
+       
+        res.setStatus(HttpServletResponse.SC_OK);
+        res.setContentType("application/json");
+
+        
+        String jsonString = "{\"jwtToken\":" + "\"" + SecurityConstants.TOKEN_PREFIX + token + "\","
+        		+ "\"username\":" + "\"" + user.getUsername() + "\""
+        		+ "}";
+        res.getWriter().println(jsonString);
+
     }
 }
