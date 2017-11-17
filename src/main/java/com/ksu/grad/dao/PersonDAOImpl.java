@@ -23,7 +23,7 @@ public class PersonDAOImpl implements PersonDAO {
 	private static final Logger LOGGER = Logger.getLogger(PersonDAOImpl.class);
 	
 	private static final String SELECT_ALL_EMPLOYEES = 
-			"SELECT a.ID, a.FirstName, a.LastName, a.EmailAddress, a.Phone FROM EMAS.Person a";
+			"SELECT a.* FROM EMAS.Person a";
 	
 	private static final String REGISTER_NEW_USER=
 			"INSERT INTO EMAS.Person (FirstName, LastName, EmailAddress, Phone) VALUES (?,?,?,?)";
