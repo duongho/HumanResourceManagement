@@ -49,7 +49,6 @@ public class Address implements java.io.Serializable {
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-
 	@Column(name = "ID", unique = true, nullable = false)
 	public Integer getId() {
 		return this.id;
@@ -59,7 +58,7 @@ public class Address implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "State_Id", nullable = false)
 	public State getState() {
 		return this.state;
@@ -96,7 +95,7 @@ public class Address implements java.io.Serializable {
 		this.zipcode = zipcode;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "address")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "address")
 	public Set<Person> getPersons() {
 		return this.persons;
 	}

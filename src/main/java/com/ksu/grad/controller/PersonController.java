@@ -24,10 +24,10 @@ public class PersonController {
 	
 	
 	@GetMapping("all")
-	public ResponseEntity<List<Person>> getAllEmployees() {
+	public ResponseEntity<Person> getAllEmployees() {
 		List<Person> list = personService.getAllEmployees();
 		
-		return new ResponseEntity<List<Person>>(list, HttpStatus.OK);
+		return new ResponseEntity<Person>(list.get(0), HttpStatus.OK);
 	}
 	
 	@GetMapping("hello")

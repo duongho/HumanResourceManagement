@@ -52,7 +52,6 @@ public class Person implements java.io.Serializable {
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-
 	@Column(name = "ID", unique = true, nullable = false)
 	public Integer getId() {
 		return this.id;
@@ -62,7 +61,7 @@ public class Person implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "AddressId", nullable = false)
 	public Address getAddress() {
 		return this.address;
@@ -108,7 +107,7 @@ public class Person implements java.io.Serializable {
 		this.phone = phone;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "person")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "person")
 	public Set<Employee> getEmployees() {
 		return this.employees;
 	}

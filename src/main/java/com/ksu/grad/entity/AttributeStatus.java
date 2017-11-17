@@ -47,7 +47,6 @@ public class AttributeStatus implements java.io.Serializable {
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-
 	@Column(name = "ID", unique = true, nullable = false)
 	public Integer getId() {
 		return this.id;
@@ -57,7 +56,7 @@ public class AttributeStatus implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "AttributeId", nullable = false)
 	public Attribute getAttribute() {
 		return this.attribute;
@@ -67,7 +66,7 @@ public class AttributeStatus implements java.io.Serializable {
 		this.attribute = attribute;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "StatusId", nullable = false)
 	public Status getStatus() {
 		return this.status;
@@ -86,7 +85,7 @@ public class AttributeStatus implements java.io.Serializable {
 		this.isFinal = isFinal;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "attributeStatus")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "attributeStatus")
 	public Set<EmployeeHistory> getEmployeeHistories() {
 		return this.employeeHistories;
 	}

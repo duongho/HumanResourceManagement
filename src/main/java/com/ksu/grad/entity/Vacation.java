@@ -35,7 +35,6 @@ public class Vacation implements java.io.Serializable {
 	}
 
 	@Id
-
 	@Column(name = "ID", unique = true, nullable = false)
 	public int getId() {
 		return this.id;

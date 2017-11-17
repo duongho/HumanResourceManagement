@@ -39,7 +39,6 @@ public class Status implements java.io.Serializable {
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-
 	@Column(name = "ID", unique = true, nullable = false)
 	public Integer getId() {
 		return this.id;
@@ -67,7 +66,7 @@ public class Status implements java.io.Serializable {
 		this.description = description;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "status")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "status")
 	public Set<AttributeStatus> getAttributeStatuses() {
 		return this.attributeStatuses;
 	}

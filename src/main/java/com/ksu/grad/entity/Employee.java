@@ -66,7 +66,6 @@ public class Employee implements java.io.Serializable {
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-
 	@Column(name = "ID", unique = true, nullable = false)
 	public Integer getId() {
 		return this.id;
@@ -76,7 +75,7 @@ public class Employee implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "LoginId", unique = true, nullable = false)
 	public Login getLogin() {
 		return this.login;
@@ -86,7 +85,7 @@ public class Employee implements java.io.Serializable {
 		this.login = login;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "PersonId", unique = true, nullable = false)
 	public Person getPerson() {
 		return this.person;
@@ -115,7 +114,7 @@ public class Employee implements java.io.Serializable {
 		this.startDate = startDate;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employeeByEmployeeId")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "employeeByEmployeeId")
 	public Set<EmployeeHistory> getEmployeeHistoriesForEmployeeId() {
 		return this.employeeHistoriesForEmployeeId;
 	}
@@ -124,7 +123,7 @@ public class Employee implements java.io.Serializable {
 		this.employeeHistoriesForEmployeeId = employeeHistoriesForEmployeeId;
 	}
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "EmployeeCorrelation", catalog = "EMAS", joinColumns = {
 			@JoinColumn(name = "ManagerId", nullable = false, updatable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "EmployeeId", nullable = false, updatable = false) })
@@ -136,7 +135,7 @@ public class Employee implements java.io.Serializable {
 		this.employeesForEmployeeId = employeesForEmployeeId;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "employee")
 	public Set<Department> getDepartments() {
 		return this.departments;
 	}
@@ -145,7 +144,7 @@ public class Employee implements java.io.Serializable {
 		this.departments = departments;
 	}
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "EmployeeCorrelation", catalog = "EMAS", joinColumns = {
 			@JoinColumn(name = "EmployeeId", nullable = false, updatable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "ManagerId", nullable = false, updatable = false) })
@@ -157,7 +156,7 @@ public class Employee implements java.io.Serializable {
 		this.employeesForManagerId = employeesForManagerId;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employeeByModifiedBy")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "employeeByModifiedBy")
 	public Set<EmployeeHistory> getEmployeeHistoriesForModifiedBy() {
 		return this.employeeHistoriesForModifiedBy;
 	}

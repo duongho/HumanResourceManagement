@@ -39,7 +39,7 @@ public class PersonDAOImpl implements PersonDAO {
 	public List<Person> getAllEmployees() {
 
 		Query q = entityManager.createNativeQuery(SELECT_ALL_EMPLOYEES, Person.class);
-		List<Person> employees = ListConverter.castList(Person.class, q.getResultList());
+		List<Person> employees = q.getResultList();
 		 return employees;
 	}
 	

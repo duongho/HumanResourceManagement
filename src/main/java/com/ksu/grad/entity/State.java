@@ -46,7 +46,6 @@ public class State implements java.io.Serializable {
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-
 	@Column(name = "ID", unique = true, nullable = false)
 	public Integer getId() {
 		return this.id;
@@ -56,7 +55,7 @@ public class State implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "Country_Id", nullable = false)
 	public Country getCountry() {
 		return this.country;
@@ -84,7 +83,7 @@ public class State implements java.io.Serializable {
 		this.code = code;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "state")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "state")
 	public Set<Address> getAddresses() {
 		return this.addresses;
 	}

@@ -46,7 +46,6 @@ public class Attribute implements java.io.Serializable {
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-
 	@Column(name = "ID", unique = true, nullable = false)
 	public Integer getId() {
 		return this.id;
@@ -92,7 +91,7 @@ public class Attribute implements java.io.Serializable {
 		this.isNotification = isNotification;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "attribute")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "attribute")
 	public Set<AttributeStatus> getAttributeStatuses() {
 		return this.attributeStatuses;
 	}

@@ -43,7 +43,6 @@ public class Weight implements java.io.Serializable {
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-
 	@Column(name = "ID", unique = true, nullable = false)
 	public Integer getId() {
 		return this.id;
@@ -62,7 +61,7 @@ public class Weight implements java.io.Serializable {
 		this.value = value;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "weight")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "weight")
 	public Set<EmployeeType> getEmployeeTypes() {
 		return this.employeeTypes;
 	}
@@ -71,7 +70,7 @@ public class Weight implements java.io.Serializable {
 		this.employeeTypes = employeeTypes;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "weight")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "weight")
 	public Set<Leaves> getLeaveses() {
 		return this.leaveses;
 	}
@@ -80,7 +79,7 @@ public class Weight implements java.io.Serializable {
 		this.leaveses = leaveses;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "weight")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "weight")
 	public Set<Review> getReviews() {
 		return this.reviews;
 	}

@@ -41,7 +41,7 @@ public class LoginDAOImpl implements LoginDAO {
 	public List<Login> getAllLogins() {
 
 		Query q = entityManager.createNativeQuery(GETALL, Login.class);
-		List<Login> entities = ListConverter.castList(Login.class, q.getResultList());
+		List<Login> entities = q.getResultList();
 		 return entities;
 	}
 	

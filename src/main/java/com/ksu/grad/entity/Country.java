@@ -46,7 +46,6 @@ public class Country implements java.io.Serializable {
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-
 	@Column(name = "ID", unique = true, nullable = false)
 	public Integer getId() {
 		return this.id;
@@ -92,7 +91,7 @@ public class Country implements java.io.Serializable {
 		this.zipActive = zipActive;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "country")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "country")
 	public Set<State> getStates() {
 		return this.states;
 	}

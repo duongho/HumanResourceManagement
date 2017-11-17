@@ -39,7 +39,6 @@ public class EmployeeType implements java.io.Serializable {
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-
 	@Column(name = "ID", unique = true, nullable = false)
 	public Integer getId() {
 		return this.id;
@@ -49,7 +48,7 @@ public class EmployeeType implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "WeightId", nullable = false)
 	public Weight getWeight() {
 		return this.weight;

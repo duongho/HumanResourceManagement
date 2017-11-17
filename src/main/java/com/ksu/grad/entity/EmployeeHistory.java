@@ -45,7 +45,6 @@ public class EmployeeHistory implements java.io.Serializable {
 	}
 
 	@EmbeddedId
-
 	@AttributeOverrides({
 			@AttributeOverride(name = "validFrom", column = @Column(name = "ValidFrom", nullable = false, length = 19)),
 			@AttributeOverride(name = "employeeId", column = @Column(name = "EmployeeId", nullable = false)) })
@@ -57,7 +56,7 @@ public class EmployeeHistory implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "AttributeStatusId", nullable = false)
 	public AttributeStatus getAttributeStatus() {
 		return this.attributeStatus;
@@ -67,7 +66,7 @@ public class EmployeeHistory implements java.io.Serializable {
 		this.attributeStatus = attributeStatus;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "EmployeeId", nullable = false, insertable = false, updatable = false)
 	public Employee getEmployeeByEmployeeId() {
 		return this.employeeByEmployeeId;
@@ -77,7 +76,7 @@ public class EmployeeHistory implements java.io.Serializable {
 		this.employeeByEmployeeId = employeeByEmployeeId;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ModifiedBy", nullable = false)
 	public Employee getEmployeeByModifiedBy() {
 		return this.employeeByModifiedBy;
