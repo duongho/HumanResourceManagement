@@ -6,7 +6,7 @@ import com.ksu.grad.entity.Person;
 
 public interface PersonDAO {
 
-	List<Person> getAllEmployees();
+	List<Person> getAllPersons();
 	
 	//return success/failure
 	boolean registerNewEmployee(Person p) throws Exception;

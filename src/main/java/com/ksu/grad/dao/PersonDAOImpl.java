@@ -1,5 +1,6 @@
 package com.ksu.grad.dao;
 
+
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -11,7 +12,6 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import com.ksu.grad.entity.Person;
-import com.ksu.grad.service.convertors.ListConverter;
 
 @Transactional
 @Repository
@@ -22,7 +22,7 @@ public class PersonDAOImpl implements PersonDAO {
 	
 	private static final Logger LOGGER = Logger.getLogger(PersonDAOImpl.class);
 	
-	private static final String SELECT_ALL_EMPLOYEES = 
+	private static final String SELECT_ALL_PERSONS = 
 			"SELECT a.* FROM EMAS.Person a";
 	
 	private static final String REGISTER_NEW_USER=
@@ -36,11 +36,12 @@ public class PersonDAOImpl implements PersonDAO {
 	 * get back all employees that are in the employee tables
 	 */
 	@Override
-	public List<Person> getAllEmployees() {
+	public List<Person> getAllPersons(){
 
-		Query q = entityManager.createNativeQuery(SELECT_ALL_EMPLOYEES, Person.class);
-		List<Person> employees = q.getResultList();
-		 return employees;
+		Query q = entityManager.createNativeQuery(SELECT_ALL_PERSONS, Person.class);
+		List<Person> allPersons = q.getResultList();
+		
+		 return allPersons;
 	}
 	
 

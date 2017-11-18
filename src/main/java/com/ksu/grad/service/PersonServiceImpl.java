@@ -9,14 +9,15 @@ import com.ksu.grad.dao.PersonDAO;
 import com.ksu.grad.entity.Person;
 
 @Service
-public class PersonServiceImpl implements PersonService{
-	
+public class PersonServiceImpl implements PersonService {
+
 	@Autowired
 	private PersonDAO personDAO;
 
 	@Override
-	public List<Person> getAllEmployees() {
-		return personDAO.getAllEmployees();
+	public List<Person> getAllPersons() {
+		List<Person> employees = personDAO.getAllPersons();
+		return employees;
 	}
 
 	@Override

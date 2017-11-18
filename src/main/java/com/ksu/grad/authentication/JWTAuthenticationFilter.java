@@ -1,7 +1,7 @@
 package com.ksu.grad.authentication;
 
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ksu.grad.entity.Login;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -32,8 +32,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest req,
                                                 HttpServletResponse res) throws AuthenticationException {
         try {
-        	Login creds = new ObjectMapper()
-                    .readValue(req.getInputStream(), Login.class);
+        	UserLogin creds = new ObjectMapper()
+                    .readValue(req.getInputStream(), UserLogin.class);
         	
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(

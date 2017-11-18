@@ -16,7 +16,7 @@ import com.ksu.grad.entity.Person;
 import com.ksu.grad.service.PersonService;
 
 @Controller
-@RequestMapping("employee")
+@RequestMapping("person")
 public class PersonController {
 	
 	@Autowired
@@ -24,10 +24,10 @@ public class PersonController {
 	
 	
 	@GetMapping("all")
-	public ResponseEntity<Person> getAllEmployees() {
-		List<Person> list = personService.getAllEmployees();
+	public ResponseEntity<List<Person>> getAllPerson() {
+		List<Person> list = personService.getAllPersons();
 		
-		return new ResponseEntity<Person>(list.get(0), HttpStatus.OK);
+		return new ResponseEntity<List<Person>>(list, HttpStatus.OK);
 	}
 	
 	@GetMapping("hello")
