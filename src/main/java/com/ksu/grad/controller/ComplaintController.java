@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.ksu.grad.entity.Complaint;
+import com.ksu.grad.entity.EmployeeHistory;
 import com.ksu.grad.service.ComplaintService;
 
 @Controller
-@RequestMapping("complaint")
+@RequestMapping("api/complaint")
 public class ComplaintController {
 
 	
@@ -22,17 +23,19 @@ public class ComplaintController {
 	ComplaintService service;
 	
 	
-	@GetMapping("{complaintId}")
-	public ResponseEntity<Complaint> getComplaintById(@PathVariable("complaintId") int complaintId){
-		Complaint complaint = service.getComplaintById(complaintId);
-		
-		return new ResponseEntity<Complaint>(complaint, HttpStatus.OK);
-	}
-	
 	@GetMapping("{empId}/all")
-	public ResponseEntity<List<Complaint>> getComplaintsForEmployee(@PathVariable("empId") int empId){
+	public ResponseEntity<List<EmployeeHistory>> getComplaintsForEmployee(@PathVariable("empId") int empId){
 		
-			return null;
+		List<EmployeeHistory> complaintHistories = service.getAllComplaintsForEmployee(empId);
+		
+		return new ResponseEntity<List<EmployeeHistory>>(complaintHistories, HttpStatus.OK);
 	}
 	
+	@GetMapping("all")
+	public ResponseEntity<List<EmployeeHistory>> getAllComplaints(){
+		
+		List<EmployeeHistory> complaintHistories = service.getAllComplaints();
+		
+		return new ResponseEntity<List<EmployeeHistory>>(complaintHistories, HttpStatus.OK);
+	}
 }

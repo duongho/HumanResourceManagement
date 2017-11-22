@@ -3,10 +3,10 @@ package com.ksu.grad.service;
 import java.util.List;
 
 import com.ksu.grad.entity.Complaint;
+import com.ksu.grad.entity.EmployeeHistory;
 
 public interface ComplaintService {
-
-	public Complaint getComplaintById(int complaintId);
-	
-	public List<Complaint> getComplaintsForEmployee(int empId);
+		
+	List<EmployeeHistory> getAllComplaintsForEmployee(int empId);
+	List<EmployeeHistory> getAllComplaints();
 }
