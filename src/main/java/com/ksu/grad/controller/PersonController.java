@@ -35,14 +35,6 @@ public class PersonController {
 				return new ResponseEntity<String>("Hello", HttpStatus.OK);
 	}
 	
-    @RequestMapping(value="/register", method = RequestMethod.POST)
-    @ResponseBody
-    public ResponseEntity<Boolean> register(@RequestBody Person person) throws Exception{
-
-    	boolean b = personService.registerNewEmployee(person);
-    
-    	return new ResponseEntity<Boolean>(b, HttpStatus.OK);
-    }
     
     
 }

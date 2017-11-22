@@ -26,9 +26,7 @@ public class PersonDAOImpl implements PersonDAO {
 			"SELECT a.* FROM EMAS.Person a";
 	
 	private static final String REGISTER_NEW_USER=
-			"INSERT INTO EMAS.Person (FirstName, LastName, EmailAddress, Phone) VALUES (?,?,?,?)";
-	  
-	  
+			"INSERT INTO EMAS.Person (FirstName, LastName, EmailAddress, Phone) VALUES (?,?,?,?)";	  
 	  
 	
 	
@@ -39,8 +37,7 @@ public class PersonDAOImpl implements PersonDAO {
 	public List<Person> getAllPersons(){
 
 		Query q = entityManager.createNativeQuery(SELECT_ALL_PERSONS, Person.class);
-		List<Person> allPersons = q.getResultList();
-		
+		List<Person> allPersons = q.getResultList();		
 		 return allPersons;
 	}
 	
