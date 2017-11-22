@@ -16,7 +16,7 @@ import com.ksu.grad.entity.Person;
 import com.ksu.grad.service.PersonService;
 
 @Controller
-@RequestMapping("person")
+@RequestMapping("api/person")
 public class PersonController {
 	
 	@Autowired

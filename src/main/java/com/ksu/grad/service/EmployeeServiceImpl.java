@@ -20,4 +20,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employeeDAO.getAllEmployees();
 	}
 
+
+	@Override
+	public Employee getEmployeeById(int empId) {
+		return employeeDAO.getEmployeeById(empId);
+	}
+	
+	
+
 }

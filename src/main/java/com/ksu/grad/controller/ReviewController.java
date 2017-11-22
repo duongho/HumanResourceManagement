@@ -11,29 +11,28 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.ksu.grad.entity.EmployeeHistory;
 import com.ksu.grad.entity.Review;
 import com.ksu.grad.service.ReviewService;
 
 @Controller
-@RequestMapping("review")
+@RequestMapping("api/review")
 public class ReviewController {
 	
 	@Autowired
 	ReviewService reviewService;
 	
 	@GetMapping("all")
-	public ResponseEntity<List<Review>> getAllPerson() {
-		List<Review> list = reviewService.getAllReviews();
+	public ResponseEntity<List<EmployeeHistory>> getAllReviews(){
+		List<EmployeeHistory> list = reviewService.getAllReviews();
 		
-		return new ResponseEntity<List<Review>>(list, HttpStatus.OK);
+		return new ResponseEntity<List<EmployeeHistory>>(list, HttpStatus.OK);
 	}
 	
-	
-	@RequestMapping(value="{reviewId}", method=RequestMethod.GET)
-	public ResponseEntity<Review> getReview(@PathVariable ("reviewId") int reviewId){
+	@RequestMapping(value="employee/{empId}/all", method=RequestMethod.GET)
+	public ResponseEntity<List<EmployeeHistory>> getAllReviewsForEmployeeId(@PathVariable("empId") int empId){
 		
-		Review review = reviewService.getReviewById(reviewId);
-		
-		return new ResponseEntity<Review>(review, HttpStatus.OK);
+		List<EmployeeHistory> empHistoryList = reviewService.getAllReviewsForEmployeeId(empId);
+		return new ResponseEntity<List<EmployeeHistory>>(empHistoryList, HttpStatus.OK);
 	}
 }
