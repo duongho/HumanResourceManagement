@@ -18,4 +18,6 @@ public interface LeaveService {
 	List<EmployeeHistory> pendingDisplayLeaveRequest();
 	
 	String approveLeaveRequest(int empId, String status);
+	
+	List<EmployeeHistory> getAllPendingEmpRequestForManager(int managerId);
 }

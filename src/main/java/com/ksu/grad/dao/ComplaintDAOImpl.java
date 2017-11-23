@@ -26,6 +26,14 @@ public class ComplaintDAOImpl implements ComplaintDAO {
 			+ " ON a.AttributeStatusId = b.ID"
 			+ " WHERE b.AttributeId = 4";
 	
+	private static final String SELECT_COMPLAINTS_FOR_MANAGER_REVIEW =
+			"SELECT a.* FROM EMAS.EmployeeHistory a INNER JOIN EMAS.AttributeStatus b"
+			+ " ON a.AttributeStatusId = b.ID"
+			+ " WHERE b.AttributeId = 4 "
+            + " AND b.IsFinal = 0 " 
+			+ " AND a.EmployeeId IN "
+			+ "(SELECT DISTINCT EmployeeId FROM EMAS.EmployeeCorrelation WHERE ManagerId = :managerId)";
+	
 	@PersistenceContext
 	EntityManager em;
 
@@ -56,6 +64,20 @@ public class ComplaintDAOImpl implements ComplaintDAO {
 	public List<EmployeeHistory> getAllComplaints() {
 
 		Query q = em.createNativeQuery(SELECT_ALL_COMPLAINTS, EmployeeHistory.class);
+		List<EmployeeHistory> list = q.getResultList();
+		
+		if (list == null){
+			return null;
+		}
+		
+		return list;
+	}
+
+
+	@Override
+	public List<EmployeeHistory> getAllComplaintsUnderManager(int managerId) {
+		Query q = em.createNativeQuery(SELECT_COMPLAINTS_FOR_MANAGER_REVIEW, EmployeeHistory.class);
+		q.setParameter("managerId", managerId);
 		List<EmployeeHistory> list = q.getResultList();
 		
 		if (list == null){

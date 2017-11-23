@@ -38,4 +38,12 @@ public class ComplaintController {
 		
 		return new ResponseEntity<List<EmployeeHistory>>(complaintHistories, HttpStatus.OK);
 	}
+	
+	@GetMapping("manager/{id}")
+	public ResponseEntity<List<EmployeeHistory>> getAllNewComplaintsForManagerReview(@PathVariable("id") int managerId){
+		
+		List<EmployeeHistory> complaintHistories = service.getAllComplaintsUnderManager(managerId);
+		
+		return new ResponseEntity<List<EmployeeHistory>>(complaintHistories, HttpStatus.OK);
+	}
 }

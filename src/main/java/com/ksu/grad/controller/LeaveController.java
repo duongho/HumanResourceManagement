@@ -35,6 +35,11 @@ public class LeaveController {
 	}
 	
 
+	/**
+	 * get all pending leave requests for the provided employee id
+	 * @param id
+	 * @return
+	 */
 	@RequestMapping(value="/displayLeave/{id}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<List<EmployeeHistory>>   displayLeaveRequest(@PathVariable int id){
@@ -42,6 +47,11 @@ public class LeaveController {
 		return new ResponseEntity<List<EmployeeHistory>>(leaveRequestlst, HttpStatus.OK);		
 	}
 	
+	/**
+	 * get all pending leave requests for all employees
+	 * @param id
+	 * @return
+	 */
 	@RequestMapping(value="/pendingLeaveRequest", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<List<EmployeeHistory>> displayPendingLeaveRequest(){
@@ -54,6 +64,19 @@ public class LeaveController {
 	public ResponseEntity<String> approveLeave(@RequestParam String leaveStatus,@PathVariable int id){
 		String status = leaveService.approveLeaveRequest(id, leaveStatus);
 		return new ResponseEntity<String>(status, HttpStatus.OK);		
+	}
+	
+	/**
+	 * get all pending leave requests for a given manager id
+	 * @param leaveStatus
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value="/manager/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<List<EmployeeHistory>> getAllEmployeePendingRequestForManager(@PathVariable("id") int managerId){
+		List<EmployeeHistory> empHistories = leaveService.getAllPendingEmpRequestForManager(managerId);
+		return new ResponseEntity<List<EmployeeHistory>>(empHistories, HttpStatus.OK);		
 	}
 }
 

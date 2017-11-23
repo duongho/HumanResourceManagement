@@ -9,4 +9,6 @@ public interface ComplaintService {
 		
 	List<EmployeeHistory> getAllComplaintsForEmployee(int empId);
 	List<EmployeeHistory> getAllComplaints();
+	
+	List<EmployeeHistory> getAllComplaintsUnderManager(int managerId);
 }

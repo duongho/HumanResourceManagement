@@ -32,4 +32,9 @@ public class ReviewServiceImpl implements ReviewService{
 		return reviewDAO.createReview(review);
 	}
 
+	@Override
+	public List<EmployeeHistory> getAllEmpNewReviewForManager(int managerId) {
+		return reviewDAO.getAllEmpNewReviewForManager(managerId);
+	}
+
 }

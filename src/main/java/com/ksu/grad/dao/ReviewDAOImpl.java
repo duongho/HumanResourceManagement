@@ -33,6 +33,15 @@ public class ReviewDAOImpl implements ReviewDAO {
 							+ "WHERE b.AttributeId = 5 "
 							+ "AND a.EmployeeId = :empId";
 	
+	private static final String SELECT_ALL_EMP_REVIEWS_FOR_MANAGER=
+					"SELECT a.* FROM EMAS.EmployeeHistory a "
+					+ "INNER JOIN EMAS.AttributeStatus b "
+					+ "ON a.AttributeStatusId = b.ID "
+					+ "WHERE b.AttributeId = 5 "
+					+ " AND b.IsFinal =0 "
+					+ " AND a.EmployeeId "
+					+ "IN (SELECT DISTINCT EmployeeId FROM EMAS.EmployeeCorrelation WHERE ManagerId = :managerId)";	
+	
 	private static final String CREATE_REVIEW_STORE_PROC = "BEGIN EMAS.CreateEmployeeReview(?,?,?,?,?); END;";
 	
 	@PersistenceContext
@@ -64,6 +73,22 @@ public class ReviewDAOImpl implements ReviewDAO {
 		
 		return reviewHistoryForEmployee;
 	}
+	
+	
+	@Override
+	public List<EmployeeHistory> getAllEmpNewReviewForManager(int managerId) {
+		Query q = entityManager.createNativeQuery(SELECT_ALL_EMP_REVIEWS_FOR_MANAGER, EmployeeHistory.class);
+		q.setParameter("managerId", managerId);
+		
+		List<EmployeeHistory> reviewHistoryForEmployee = q.getResultList();
+		
+		if (reviewHistoryForEmployee == null){
+			logger.debug("Found no review in the system");
+			return null;
+		}
+		
+		return reviewHistoryForEmployee;
+	}
 
 	//if anything happen then the code will throw an exception. 
 	@Override
@@ -85,5 +110,7 @@ public class ReviewDAOImpl implements ReviewDAO {
 		
 		return b;
 	}
+
+
 
 }

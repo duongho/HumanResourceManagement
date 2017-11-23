@@ -20,4 +20,6 @@ public interface LeaveDAO {
 	Attribute getAttributeforCreate();
 	
 	Status getStatusforCreate();
+	
+	List<EmployeeHistory> getAllPendingEmpRequestForManager(int managerId);
 }

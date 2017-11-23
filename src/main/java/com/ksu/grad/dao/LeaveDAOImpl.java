@@ -29,10 +29,14 @@ public class LeaveDAOImpl implements LeaveDAO{
 			"JOIN EMAS.Status s ON atst.StatusId = s.id WHERE eh.EmployeeId = ? AND a.Label = 'Sick Leave' AND s.Label = 'Created'";		
 	
 	
-	private static final  String PENDING_LEAVE_REQUEST_FOR_EMPLOYEE = "SELECT eh.* FROM EMAS.EmployeeHistory eh" + 
+	private static final  String PENDING_LEAVE_REQUEST_FOR_ALL_EMPLOYEES = "SELECT eh.* FROM EMAS.EmployeeHistory eh" + 
 			"JOIN EMAS.AttributeStatus atst ON eh.AttributeStatusId = atst.id JOIN EMAS.Attribute a ON atst.AttributeId = a.id" + 
-			"JOIN EMAS.Status s ON atst.StatusId = s.id WHERE eh.EmployeeId = ? AND a.Label = 'Sick Leave' AND atst.IsFinal =0";
+			"JOIN EMAS.Status s ON atst.StatusId = s.id WHERE a.Label = 'Sick Leave' AND atst.IsFinal =0";
 	
+	private static final  String SELECT_ALL_EMPLOYEE_PENDING_REQUEST_FOR_MANAGER = "SELECT eh.* FROM EMAS.EmployeeHistory eh" + 
+			" JOIN EMAS.AttributeStatus atst ON eh.AttributeStatusId = atst.id JOIN EMAS.Attribute a ON atst.AttributeId = a.id " + 
+			" JOIN EMAS.Status s ON atst.StatusId = s.id WHERE a.Label = 'Sick Leave' AND atst.IsFinal =0 " +
+			 "  AND eh.EmployeeId IN (SELECT DISTINCT EmployeeId FROM EMAS.EmployeeCorrelation WHERE ManagerId = :managerId)";
 	
 	private static final  String APPROVE_LEAVE_REQUEST = "Update  ";
 	
@@ -47,6 +51,9 @@ public class LeaveDAOImpl implements LeaveDAO{
 		return true;
 	}
 	
+	/**
+	 * get all leave request for an emplyee
+	 */
 	@Override
 	public List<EmployeeHistory> getAllLeaveRequest(int empId) {
 		Query q = entityManager.createNativeQuery(LEAVE_REQUEST_FOR_EMPLOYEE, EmployeeHistory.class);
@@ -54,9 +61,13 @@ public class LeaveDAOImpl implements LeaveDAO{
 		List<EmployeeHistory> employeeHistory = q.getResultList();
 		return employeeHistory;
 	}
+	
+	/**
+	 * this actually get back all pending leave requests for all employees
+	 */
 	@Override
 	public List<EmployeeHistory> displayPendingLeaveRequest(){
-		Query q = entityManager.createNativeQuery(PENDING_LEAVE_REQUEST_FOR_EMPLOYEE, EmployeeHistory.class);
+		Query q = entityManager.createNativeQuery(PENDING_LEAVE_REQUEST_FOR_ALL_EMPLOYEES, EmployeeHistory.class);
 		List<EmployeeHistory> employeeHistory = q.getResultList();
 		return employeeHistory;	
 	}
@@ -80,6 +91,14 @@ public class LeaveDAOImpl implements LeaveDAO{
 		Query q = entityManager.createNativeQuery(STATUS_FOR_CREATE_LEAVE, Status.class);
 		Status status = (Status) q.getResultList().get(0);
 		return status;
+	}
+
+	@Override
+	public List<EmployeeHistory> getAllPendingEmpRequestForManager(int managerId) {
+		Query q = entityManager.createNativeQuery(SELECT_ALL_EMPLOYEE_PENDING_REQUEST_FOR_MANAGER, EmployeeHistory.class);
+		q.setParameter("managerId", managerId);
+		List<EmployeeHistory> employeeHistory = q.getResultList();
+		return employeeHistory;	
 	}
 	
 	/*public List getStatusId() {

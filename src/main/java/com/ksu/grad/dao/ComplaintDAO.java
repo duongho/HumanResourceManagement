@@ -9,4 +9,6 @@ public interface ComplaintDAO {
 	
 	public List<EmployeeHistory> getAllComplaintsForEmployee(int empId);
 	public List<EmployeeHistory> getAllComplaints();
+	
+	public List<EmployeeHistory> getAllComplaintsUnderManager(int managerId);
 }

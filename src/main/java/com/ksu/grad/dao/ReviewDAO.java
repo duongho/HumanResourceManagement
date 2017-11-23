@@ -10,5 +10,6 @@ public interface ReviewDAO {
 
 	public List<EmployeeHistory> getAllReviews();
 	public List<EmployeeHistory> getAllReviewsForEmployeeId(int empId);
+	public List<EmployeeHistory> getAllEmpNewReviewForManager(int managerId);
 	public boolean createReview(ReviewPOJO review);
 }

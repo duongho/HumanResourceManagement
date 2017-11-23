@@ -46,6 +46,17 @@ public class ReviewController {
 	}
 	
 	/**
+	 * This method gets all review for all employees under a specific manager
+	 * @return
+	 */
+	@RequestMapping(value="manager/{managerId}", method=RequestMethod.GET)
+	public ResponseEntity<List<EmployeeHistory>> getAllEmployeesNewReviewUnderManager(@PathVariable("managerId") int managerId){
+		
+		List<EmployeeHistory> empHistoryList = reviewService.getAllEmpNewReviewForManager(managerId);
+		return new ResponseEntity<List<EmployeeHistory>>(empHistoryList, HttpStatus.OK);
+	}
+	
+	/**
 	 * This method creates a new review
 	 * @return
 	 */
@@ -57,6 +68,7 @@ public class ReviewController {
 		if (b) 	return new ResponseEntity<String>("Success", HttpStatus.OK);
 		
 		return new ResponseEntity<String>("Failed to create the review", HttpStatus.BAD_REQUEST);
-
 	} 
+	
+	
 }

@@ -23,4 +23,11 @@ public class ComplaintServiceImpl implements ComplaintService {
 	public List<EmployeeHistory> getAllComplaints() {
 		return dao.getAllComplaints();
 	}
+
+	@Override
+	public List<EmployeeHistory> getAllComplaintsUnderManager(int managerId) {
+		return dao.getAllComplaintsUnderManager(managerId);
+	}
+	
+	
 }

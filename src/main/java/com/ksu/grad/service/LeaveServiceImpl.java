@@ -80,4 +80,9 @@ public class LeaveServiceImpl implements LeaveService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	@Override
+	public List<EmployeeHistory> getAllPendingEmpRequestForManager(int managerId) {
+
+		return leaveDao.getAllPendingEmpRequestForManager(managerId);
+	}
 }

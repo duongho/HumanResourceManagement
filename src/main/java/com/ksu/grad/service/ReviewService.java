@@ -11,4 +11,6 @@ public interface ReviewService {
 	public List<EmployeeHistory> getAllReviews();
 	public List<EmployeeHistory> getAllReviewsForEmployeeId (int empId);
 	public boolean createReview (ReviewPOJO review);
+	
+	public List<EmployeeHistory> getAllEmpNewReviewForManager(int managerId);
 }
