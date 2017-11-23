@@ -37,6 +37,8 @@ public class Employee implements java.io.Serializable {
 	private Person person;
 	private BigDecimal salary;
 	private Date startDate;
+	private boolean isActive;
+	
 	private Set<EmployeeHistory> employeeHistoriesForEmployeeId = new HashSet<EmployeeHistory>(0);
 	private Set<Employee> employeesForEmployeeId = new HashSet<Employee>(0);
 	private Set<Department> departments = new HashSet<Department>(0);
@@ -46,14 +48,15 @@ public class Employee implements java.io.Serializable {
 	public Employee() {
 	}
 
-	public Employee(Login login, Person person, BigDecimal salary, Date startDate) {
+	public Employee(Login login, Person person, BigDecimal salary, Date startDate, boolean isActive) {
 		this.login = login;
 		this.person = person;
 		this.salary = salary;
 		this.startDate = startDate;
+		this.isActive = isActive;
 	}
 
-	public Employee(Login login, Person person, BigDecimal salary, Date startDate,
+	public Employee(Login login, Person person, BigDecimal salary, Date startDate,boolean isActive,
 			Set<EmployeeHistory> employeeHistoriesForEmployeeId, Set<Employee> employeesForEmployeeId,
 			Set<Department> departments, Set<Employee> employeesForManagerId,
 			Set<EmployeeHistory> employeeHistoriesForModifiedBy) {
@@ -61,6 +64,7 @@ public class Employee implements java.io.Serializable {
 		this.person = person;
 		this.salary = salary;
 		this.startDate = startDate;
+		this.isActive = isActive;
 		this.employeeHistoriesForEmployeeId = employeeHistoriesForEmployeeId;
 		this.employeesForEmployeeId = employeesForEmployeeId;
 		this.departments = departments;
@@ -118,6 +122,15 @@ public class Employee implements java.io.Serializable {
 
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
+	}
+	
+	@Column(name = "IsActive", nullable = false)
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
 	}
 
 	@JsonBackReference

@@ -20,4 +20,8 @@ public interface EmployeeService {
     		String city, String state, String zipcode,String password,int id) throws ParseException;
 		
 	List<Employee> getAllManagers();
+	
+	boolean  quitEmployee(int empId);
+	
+	
 }

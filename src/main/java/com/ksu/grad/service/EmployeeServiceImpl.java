@@ -171,6 +171,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public Employee getEmployeeById(int empId) {
 		return employeeDAO.getEmployeeById(empId);
 	}
+
+	@Override
+	public boolean quitEmployee(int empId) {
+		
+		return false;
+	}
 	
 
 }

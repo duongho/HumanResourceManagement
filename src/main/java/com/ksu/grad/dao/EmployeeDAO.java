@@ -17,4 +17,6 @@ public interface EmployeeDAO {
 	
 	List<Employee> getAllManagers();
 	
+	boolean  quitEmployee(int empId);
+	
 }

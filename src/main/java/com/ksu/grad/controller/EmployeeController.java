@@ -60,5 +60,17 @@ public class EmployeeController {
     	}    	
     		
     }
+    @RequestMapping(value="/quit/{empId}", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<String>  terminateEmployee(@PathVariable int empId){
+    	boolean status = empService.quitEmployee(empId);
+    	if (status==true) {
+    		return new ResponseEntity<String>("Quit", HttpStatus.OK);
+    	}else {    	
+    		return new ResponseEntity<String>("Not Quit", HttpStatus.OK);
+    	}
+    	
+    }
+    
  
 }
