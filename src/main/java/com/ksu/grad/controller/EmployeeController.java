@@ -46,18 +46,15 @@ public class EmployeeController {
     	return new ResponseEntity<Employee>(newEmployee, HttpStatus.OK);
     }	
     
-    @RequestMapping(value="/updateprofile/{id}", method = RequestMethod.POST)
+    //TODO: do the actual implementation...
+    @RequestMapping(value="/update/", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<Employee> updateProfile(@RequestBody String firstname, String lastname, String address, 
-    		String email, String phone,String salary, String startDate,String username, String city, String state, 
-    		String zipcode,String password, @PathVariable int id) throws Exception{
-     	Employee newEmployee = empService.updateProfile(firstname, lastname, address, email, phone, salary, startDate, username, city, state, zipcode, password, id);    
-    	if(newEmployee!=null && newEmployee.getId()== id) {
-    		return new ResponseEntity<Employee>(newEmployee, HttpStatus.OK);
-    	}
-    	else {
-    		return new ResponseEntity<Employee>(newEmployee, HttpStatus.BAD_REQUEST);
-    	}    	
+    public ResponseEntity<Employee> updateProfile(@RequestBody EmployeePOJO newEmployee){   
+    	
+    	Employee emp = null;
+
+        return new ResponseEntity<Employee>(emp, HttpStatus.BAD_REQUEST);
+    	
     		
     }
  

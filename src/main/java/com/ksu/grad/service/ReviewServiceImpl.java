@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.ksu.grad.dao.ReviewDAO;
 import com.ksu.grad.entity.EmployeeHistory;
 import com.ksu.grad.entity.Review;
+import com.ksu.grad.pojo.ReviewPOJO;
 
 @Service
 public class ReviewServiceImpl implements ReviewService{
@@ -22,13 +23,13 @@ public class ReviewServiceImpl implements ReviewService{
 	}
 
 	@Override
-	public Review getReviewById(int reviewId) {
-		return reviewDAO.getReviewById(reviewId);
+	public List<EmployeeHistory> getAllReviewsForEmployeeId(int empId) {
+		return reviewDAO.getAllReviewsForEmployeeId(empId);
 	}
 
 	@Override
-	public List<EmployeeHistory> getAllReviewsForEmployeeId(int empId) {
-		return reviewDAO.getAllReviewsForEmployeeId(empId);
+	public boolean createReview(ReviewPOJO review) {
+		return reviewDAO.createReview(review);
 	}
 
 }

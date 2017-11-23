@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ksu.grad.entity.EmployeeHistory;
 import com.ksu.grad.entity.Review;
+import com.ksu.grad.pojo.ReviewPOJO;
 
 @Transactional
 @Repository
@@ -23,11 +24,7 @@ public class ReviewDAOImpl implements ReviewDAO {
 	private static final String SELECT_ALL_REVIEWS = 
 							"SELECT a.* FROM EMAS.EmployeeHistory a INNER JOIN EMAS.AttributeStatus b "
 						+ "ON a.AttributeStatusId = b.ID"
-						+ " WHERE b.AttributeId = 5 AND b.IsFinal=0";
-	
-	
-	private static final String SELECT_REVIEW_BY_ID ="SELECT * FROM Review WHERE ID= :reviewId";
-	
+						+ " WHERE b.AttributeId = 5";	
 	
 	private static final String SELECT_ALL_REVIEWS_FOR_EMPLOYEE= 
 							"SELECT a.* FROM EMAS.EmployeeHistory a "
@@ -35,6 +32,8 @@ public class ReviewDAOImpl implements ReviewDAO {
 							+ "ON a.AttributeStatusId = b.ID "
 							+ "WHERE b.AttributeId = 5 "
 							+ "AND a.EmployeeId = :empId";
+	
+	private static final String CREATE_REVIEW_STORE_PROC = "BEGIN EMAS.CreateEmployeeReview(?,?,?,?,?); END;";
 	
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -52,19 +51,6 @@ public class ReviewDAOImpl implements ReviewDAO {
 	}
 
 	@Override
-	public Review getReviewById(int reviewId) {
-		Query q = entityManager.createNativeQuery(SELECT_REVIEW_BY_ID, Review.class);
-		q.setParameter("reviewId", reviewId);		
-		
-		List<Review> reviews =  q.getResultList();
-		if (reviews == null || reviews.isEmpty()){
-			logger.debug("Found no review in the system");
-			return null;
-		}
-		return reviews.get(0);
-	}
-
-	@Override
 	public List<EmployeeHistory> getAllReviewsForEmployeeId(int empId) {
 		Query q = entityManager.createNativeQuery(SELECT_ALL_REVIEWS_FOR_EMPLOYEE, EmployeeHistory.class);
 		q.setParameter("empId", empId);
@@ -77,6 +63,27 @@ public class ReviewDAOImpl implements ReviewDAO {
 		}
 		
 		return reviewHistoryForEmployee;
+	}
+
+	//if anything happen then the code will throw an exception. 
+	@Override
+	public boolean createReview(ReviewPOJO review) {
+		boolean b = false;
+		try{
+			Query q = entityManager.createNativeQuery(CREATE_REVIEW_STORE_PROC)
+	                .setParameter(1, review.getJsonDetails())
+	                .setParameter(2, review.getEmployeeFirstName())
+			        .setParameter(3, review.getEmployeeLastName())
+			        .setParameter(4, review.getModifiedByFirstName())
+			        .setParameter(5, review.getModifiedByLastName());
+
+			 q.executeUpdate();
+			b=true;
+		}catch(Exception e){
+			logger.error(e.getMessage());
+		}
+		
+		return b;
 	}
 
 }
