@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.ksu.grad.entity.EmployeeHistory;
-import com.ksu.grad.entity.Review;
 import com.ksu.grad.service.ReviewService;
 
 @Controller

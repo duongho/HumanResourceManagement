@@ -30,11 +30,4 @@ public class PersonController {
 		return new ResponseEntity<List<Person>>(list, HttpStatus.OK);
 	}
 	
-	@GetMapping("hello")
-	public ResponseEntity<String> sayHello(){
-				return new ResponseEntity<String>("Hello", HttpStatus.OK);
-	}
-	
-    
-    
 }

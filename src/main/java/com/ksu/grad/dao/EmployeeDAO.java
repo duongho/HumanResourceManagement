@@ -15,6 +15,5 @@ public interface EmployeeDAO {
 	
 	Employee updateEmployee(Employee employee);
 	
-	List<Employee> getAllManagers();
-	
+	List<Employee> getAllManagers();	
 }

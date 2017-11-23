@@ -2,6 +2,8 @@ package com.ksu.grad.entity;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -65,7 +67,7 @@ public class Person implements java.io.Serializable {
 	}
 
 	@JsonManagedReference
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "AddressId", nullable = false)
 	public Address getAddress() {
 		return this.address;

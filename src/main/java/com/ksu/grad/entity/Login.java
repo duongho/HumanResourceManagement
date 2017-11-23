@@ -78,7 +78,7 @@ public class Login implements java.io.Serializable {
 		this.password = password;
 	}
 
-	@Column(name = "ResetToken", nullable = false, length = 64)
+	@Column(name = "ResetToken", length = 64)
 	public String getResetToken() {
 		return this.resetToken;
 	}
@@ -88,7 +88,7 @@ public class Login implements java.io.Serializable {
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "ValidUntil", length = 19)
+	@Column(name = "ValidUntil", length = 19, nullable=true)
 	public Date getValidUntil() {
 		return this.validUntil;
 	}

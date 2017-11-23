@@ -76,5 +76,4 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 		List<Employee> managerLst = q.getResultList();
 		return managerLst;
 	}
-
 }

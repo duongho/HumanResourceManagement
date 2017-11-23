@@ -23,7 +23,7 @@ public class ReviewDAOImpl implements ReviewDAO {
 	private static final String SELECT_ALL_REVIEWS = 
 							"SELECT a.* FROM EMAS.EmployeeHistory a INNER JOIN EMAS.AttributeStatus b "
 						+ "ON a.AttributeStatusId = b.ID"
-						+ " WHERE b.AttributeId = 5";
+						+ " WHERE b.AttributeId = 5 AND b.IsFinal=0";
 	
 	
 	private static final String SELECT_REVIEW_BY_ID ="SELECT * FROM Review WHERE ID= :reviewId";
@@ -35,7 +35,7 @@ public class ReviewDAOImpl implements ReviewDAO {
 							+ "ON a.AttributeStatusId = b.ID "
 							+ "WHERE b.AttributeId = 5 "
 							+ "AND a.EmployeeId = :empId";
-
+	
 	@PersistenceContext
 	private EntityManager entityManager;
 

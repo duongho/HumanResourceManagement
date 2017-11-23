@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ksu.grad.entity.Employee;
+import com.ksu.grad.pojo.EmployeePOJO;
 import com.ksu.grad.service.EmployeeService;
 
 @Controller
@@ -40,9 +41,8 @@ public class EmployeeController {
 
     @RequestMapping(value="/register", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<Employee> register(@RequestBody String firstname, String lastname, String address, 
-    		String email, String phone,String salary, String startDate,String username, String city, String state, String zipcode) throws Exception{
-    	Employee newEmployee = empService.registerEmployee(firstname, lastname, address, email, phone, salary, startDate, username,city,state,zipcode);    
+    public ResponseEntity<Employee> register(@RequestBody EmployeePOJO employeeModel) throws Exception{
+    	Employee newEmployee = empService.registerEmployee(employeeModel);    
     	return new ResponseEntity<Employee>(newEmployee, HttpStatus.OK);
     }	
     
