@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -84,7 +86,7 @@ public class Employee implements java.io.Serializable {
 	}
 
 	@JsonManagedReference
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "LoginId", unique = true, nullable = false)
 	public Login getLogin() {
 		return this.login;
@@ -95,7 +97,7 @@ public class Employee implements java.io.Serializable {
 	}
 
 	@JsonManagedReference
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "PersonId", unique = true, nullable = false)
 	public Person getPerson() {
 		return this.person;
@@ -167,7 +169,7 @@ public class Employee implements java.io.Serializable {
 	}
 
 	@JsonManagedReference
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	@JoinTable(name = "EmployeeCorrelation", catalog = "EMAS", joinColumns = {
 			@JoinColumn(name = "EmployeeId", nullable = false, updatable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "ManagerId", nullable = false, updatable = false) })

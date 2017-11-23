@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ksu.grad.entity.Employee;
+import com.ksu.grad.pojo.EmployeePOJO;
 import com.ksu.grad.service.EmployeeService;
 
 @Controller
@@ -40,24 +41,20 @@ public class EmployeeController {
 
     @RequestMapping(value="/register", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<Employee> register(@RequestBody String firstname, String lastname, String address, 
-    		String email, String phone,String salary, String startDate,String username, String city, String state, String zipcode) throws Exception{
-    	Employee newEmployee = empService.registerEmployee(firstname, lastname, address, email, phone, salary, startDate, username,city,state,zipcode);    
+    public ResponseEntity<Employee> register(@RequestBody EmployeePOJO employeeModel) throws Exception{
+    	Employee newEmployee = empService.registerEmployee(employeeModel);    
     	return new ResponseEntity<Employee>(newEmployee, HttpStatus.OK);
     }	
     
-    @RequestMapping(value="/updateprofile/{id}", method = RequestMethod.POST)
+    //TODO: do the actual implementation...
+    @RequestMapping(value="/update/", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<Employee> updateProfile(@RequestBody String firstname, String lastname, String address, 
-    		String email, String phone,String salary, String startDate,String username, String city, String state, 
-    		String zipcode,String password, @PathVariable int id) throws Exception{
-     	Employee newEmployee = empService.updateProfile(firstname, lastname, address, email, phone, salary, startDate, username, city, state, zipcode, password, id);    
-    	if(newEmployee!=null && newEmployee.getId()== id) {
-    		return new ResponseEntity<Employee>(newEmployee, HttpStatus.OK);
-    	}
-    	else {
-    		return new ResponseEntity<Employee>(newEmployee, HttpStatus.BAD_REQUEST);
-    	}    	
+    public ResponseEntity<Employee> updateProfile(@RequestBody EmployeePOJO newEmployee){   
+    	
+    	Employee emp = null;
+
+        return new ResponseEntity<Employee>(emp, HttpStatus.BAD_REQUEST);
+    	
     		
     }
     @RequestMapping(value="/quit/{empId}", method = RequestMethod.POST)

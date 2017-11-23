@@ -12,11 +12,9 @@ public interface EmployeeDAO {
 	
 	Employee registerEmplyee(Employee employee);
 	
-	
 	Employee updateEmployee(Employee employee);
-	
-	List<Employee> getAllManagers();
-	
+		
 	boolean  quitEmployee(int empId);
 	
+	List<Employee> getAllManagers();	
 }

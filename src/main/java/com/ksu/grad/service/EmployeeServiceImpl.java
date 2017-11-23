@@ -20,6 +20,7 @@ import com.ksu.grad.entity.Employee;
 import com.ksu.grad.entity.Login;
 import com.ksu.grad.entity.Person;
 import com.ksu.grad.entity.State;
+import com.ksu.grad.pojo.EmployeePOJO;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -39,62 +40,73 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 	
 	@Override
-	public Employee registerEmployee(String firstname, String lastname, String address, 
-    		String email, String phone,String salary, String startDate,String username, String city, String statecode, String zipcode) throws ParseException {
+	public Employee registerEmployee(EmployeePOJO employeeModel) throws ParseException {
 		Employee employee = new Employee();
 		Person person = new Person();
 		Address add = new Address();
 		Login login = new Login();
-		DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
-		Date date = format.parse(startDate);
-		if(firstname!=null || !firstname.equals("")) {
-			person.setFirstName(firstname);
-		}if(lastname!=null || !lastname.equals("")) {
-			person.setLastName(lastname);
+		
+		if(employeeModel.getFirstName()!=null || !employeeModel.getFirstName().equals("")) {
+			person.setFirstName(employeeModel.getFirstName());
 		}
-		if(address!=null || !address.equals("")) {
-			add.setAddress(address);
-		}if(city!=null || !city.equals("")) {
-			add.setCity(city);
-		}if(statecode!=null || !statecode.equals("")) {
+		
+		if(employeeModel.getLastName()!=null || !employeeModel.getLastName().equals("")) {
+			person.setLastName(employeeModel.getLastName());
+		}
+		
+		if(employeeModel.getAddress()!=null || !employeeModel.getAddress().equals("")) {
+			add.setAddress(employeeModel.getAddress());
+		}
+		
+		if(employeeModel.getCity()!=null || !employeeModel.getCity().equals("")) {
+			add.setCity(employeeModel.getCity());
+		}
+		
+		if(employeeModel.getState()!=null || !employeeModel.getState().equals("")) {
 			
-		}if(zipcode!=null || !zipcode.equals("")) {
-			add.setZipcode(zipcode);
 		}
-		if(email!=null || !email.equals("")) {
-			person.setEmailAddress(email);
+		
+		if(employeeModel.getZipcode()!=null || !employeeModel.getZipcode().equals("")) {
+			add.setZipcode(employeeModel.getZipcode());
 		}
-		if(phone!=null || !phone.equals("")) {
-			person.setPhone(phone);
+		if(employeeModel.getEmailAddress()!=null || !employeeModel.getEmailAddress().equals("")) {
+			person.setEmailAddress(employeeModel.getEmailAddress());
 		}
-		if(salary!=null || !salary.equals("")) {			
-			employee.setSalary(new BigDecimal(salary));
+		if(employeeModel.getPhone()!=null || !employeeModel.getPhone().equals("")) {
+			person.setPhone(employeeModel.getPhone());
 		}
-		if(startDate!=null || !startDate.equals("")) {
-			employee.setStartDate(date);
+			employee.setSalary(BigDecimal.valueOf(employeeModel.getSalary()));
+			
+			
+		if(employeeModel.getStartDate()!=null) {
+			employee.setStartDate(employeeModel.getStartDate());
 		}
-		if(username!=null || !username.equals("")) {
-			login.setUserName(username);
+		if(employeeModel.getUserName()!=null || !employeeModel.getUserName().equals("")) {
+			login.setUserName(employeeModel.getUserName());
 		}
+		
+		
 		
 		List lstStates = miscellaneousDAO.getAllStates();
 		State stat = null;
-		if(statecode!=null || statecode.equals("")) {
+		if(employeeModel.getState()!=null || !employeeModel.getState().equals("")) {
 		for(int i=0;i<lstStates.size();i++) {
-			stat = (State) lstStates.get(i);
-			if(stat.getCode().equals(statecode)) {
-				add.setState(stat);
+				stat = (State) lstStates.get(i);
+				if(stat.getCode().equals(employeeModel.getState())) {
+						add.setState(stat);
+				}
 			}
 		}
-		}
-		login.setPassword(bCryptPasswordEncoder.encode(generatePasswordRandomly()));
+		
+		login.setPassword(bCryptPasswordEncoder.encode(employeeModel.getPassword()));
+		login.setResetToken("");
 		person.setAddress(add);
 		employee.setPerson(person);
-		employee.setLogin(login);			 
+		employee.setLogin(login);		
+		
 		return employeeDAO.registerEmplyee(employee);		
 		}	
 			
-		
 		
 	public String generatePasswordRandomly(){
 		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?";

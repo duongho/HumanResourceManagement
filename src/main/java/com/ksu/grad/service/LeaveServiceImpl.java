@@ -11,9 +11,11 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ksu.grad.dao.EmployeeDAO;
 import com.ksu.grad.dao.LeaveDAO;
 import com.ksu.grad.entity.Attribute;
 import com.ksu.grad.entity.AttributeStatus;
+import com.ksu.grad.entity.Employee;
 import com.ksu.grad.entity.EmployeeHistory;
 import com.ksu.grad.entity.Leaves;
 import com.ksu.grad.entity.Status;
@@ -23,6 +25,9 @@ public class LeaveServiceImpl implements LeaveService {
 	
 	@Autowired
 	public LeaveDAO leaveDao;
+	
+	@Autowired
+	public EmployeeDAO empDao;
 
 	@Override
 	public EmployeeHistory leaverequest(String offFromDate, String offToDate, int offType, String justification,
@@ -47,6 +52,8 @@ public class LeaveServiceImpl implements LeaveService {
 		}
 		attrStatus.setIsFinal(false);
 		attrStatus.setStatus(status);
+		Employee emp = empDao.getEmployeeById(empId);
+		emplHistory.setEmployeeByEmployeeId(emp);
 		emplHistory.setAttributeStatus(attrStatus);				
 		return emplHistory;
 	}
