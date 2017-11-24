@@ -19,6 +19,8 @@ import com.ksu.grad.entity.Employee;
 import com.ksu.grad.entity.EmployeeHistory;
 import com.ksu.grad.entity.Leaves;
 import com.ksu.grad.entity.Status;
+import com.ksu.grad.pojo.LeavePOJO;
+import com.ksu.grad.pojo.ReviewPOJO;
 
 @Service
 public class LeaveServiceImpl implements LeaveService {
@@ -29,7 +31,7 @@ public class LeaveServiceImpl implements LeaveService {
 	@Autowired
 	public EmployeeDAO empDao;
 
-	@Override
+	/*@Override
 	public EmployeeHistory leaverequest(String offFromDate, String offToDate, int offType, String justification,
 			int managerId, int empId) throws ParseException {
 		 EmployeeHistory emplHistory = new EmployeeHistory();
@@ -56,7 +58,7 @@ public class LeaveServiceImpl implements LeaveService {
 		emplHistory.setEmployeeByEmployeeId(emp);
 		emplHistory.setAttributeStatus(attrStatus);				
 		return emplHistory;
-	}
+	}*/
 	public static String getTimeDiff(Date dateOne, Date dateTwo) {
 	     String diff = "";
 	     long timeDiff = Math.abs(dateOne.getTime() - dateTwo.getTime());
@@ -84,5 +86,10 @@ public class LeaveServiceImpl implements LeaveService {
 	public List<EmployeeHistory> getAllPendingEmpRequestForManager(int managerId) {
 
 		return leaveDao.getAllPendingEmpRequestForManager(managerId);
+	}
+
+	@Override
+	public boolean leaveRequest(LeavePOJO leaveRequest) {		
+		return leaveDao.createLeave(leaveRequest);
 	}
 }

@@ -1,8 +1,7 @@
 package com.ksu.grad.controller;
 
-import java.text.ParseException;
-import java.util.List;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.ksu.grad.entity.EmployeeHistory;
-import com.ksu.grad.entity.Leaves;
+import com.ksu.grad.pojo.LeavePOJO;
 import com.ksu.grad.service.LeaveService;
 
 @Controller
@@ -24,19 +22,23 @@ public class LeaveController {
 	
 	@Autowired
 	LeaveService leaveService;
+	/**
+	 * create a leave
+	 * @param leaveRequest
+	 * @return
+	 */
 
 	@RequestMapping(value="/request/{empId}", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<EmployeeHistory> requestLeave(@RequestParam String offFromDate, 
-    		@RequestParam  String offToDate, @RequestParam int offType,@RequestParam String justification, 
-    		@RequestParam int managerId,@PathVariable int empId) throws ParseException{
-		EmployeeHistory empHistory = leaveService.leaverequest(offFromDate, offToDate, offType, justification, managerId, empId);
-				  return new ResponseEntity<EmployeeHistory>(empHistory, HttpStatus.OK);
+    public ResponseEntity<String> requestLeave(@RequestBody LeavePOJO leaveRequest){		
+		boolean b = leaveService.leaveRequest(leaveRequest);		
+		if (b) 	return new ResponseEntity<String>("Success", HttpStatus.OK);		
+		return new ResponseEntity<String>("Failed to create the leave", HttpStatus.BAD_REQUEST);				  
 	}
 	
 
 	/**
-	 * get all pending leave requests for the provided employee id
+	 * get all leave requests for the provided employee id
 	 * @param id
 	 * @return
 	 */
@@ -58,7 +60,12 @@ public class LeaveController {
 		List<EmployeeHistory> pendingLeaveRequestlst =  leaveService.pendingDisplayLeaveRequest();
 		return new ResponseEntity<List<EmployeeHistory>>(pendingLeaveRequestlst, HttpStatus.OK);
 	}
-	
+	/**
+	 * Approve leave of a particular employee
+	 * @param leaveStatus
+	 * @param id
+	 * @return
+	 */
 	@RequestMapping(value="/approveLeave/{id}", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<String> approveLeave(@RequestParam String leaveStatus,@PathVariable int id){
