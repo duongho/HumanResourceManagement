@@ -19,7 +19,7 @@ public class HumanResourceManagementApplication extends SpringBootServletInitial
 	 public BCryptPasswordEncoder bCryptPasswordEncoder() {
 	        return new BCryptPasswordEncoder();
 	 }
-	 
+
 	 @Override
 	 protected SpringApplicationBuilder configure(SpringApplicationBuilder builder){
 		return builder.sources(HumanResourceManagementApplication.class);

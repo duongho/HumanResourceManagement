@@ -22,5 +22,7 @@ public interface EmployeeService {
 	
 	boolean  quitEmployee(int empId);
 	
+	String recoverPassword(String username);
+	
 	
 }

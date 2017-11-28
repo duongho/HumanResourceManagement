@@ -1,5 +1,6 @@
 package com.ksu.grad.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ public class ReviewController {
 	
 	@Autowired
 	ReviewService reviewService;
+	
 	
 	/**
 	 * This method gets all review, be it a new review or a review that has been updated
@@ -61,14 +63,28 @@ public class ReviewController {
 	 * @return
 	 */
 	@RequestMapping(value="create", method=RequestMethod.POST)
-	public ResponseEntity<String> createReview(@RequestBody ReviewPOJO newReview){
+	public ResponseEntity<Date> createReview(@RequestBody ReviewPOJO newReview){
 		
-		boolean b = reviewService.createReview(newReview);
+		Date validFrom = reviewService.createReview(newReview);
 		
-		if (b) 	return new ResponseEntity<String>("Success", HttpStatus.OK);
+		return new ResponseEntity<Date>(validFrom, HttpStatus.OK);
 		
-		return new ResponseEntity<String>("Failed to create the review", HttpStatus.BAD_REQUEST);
 	} 
+	
+	/**
+	 * This method complete a new review
+	 * @return
+	 */
+	@RequestMapping(value="response", method=RequestMethod.POST)
+	public ResponseEntity<Integer> responseReview(@RequestBody ReviewPOJO newReview){
+		
+		Integer empHistoryId = reviewService.responseReview(newReview);
+		
+		return new ResponseEntity<Integer>(empHistoryId, HttpStatus.OK);
+		
+	} 
+	
+	
 	
 	
 }

@@ -1,5 +1,6 @@
 package com.ksu.grad.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +29,21 @@ public class ReviewServiceImpl implements ReviewService{
 	}
 
 	@Override
-	public boolean createReview(ReviewPOJO review) {
+	public Date createReview(ReviewPOJO review) {
 		return reviewDAO.createReview(review);
 	}
 
 	@Override
+	public Integer responseReview(ReviewPOJO review) {
+		return reviewDAO.responseReview(review);
+
+	}
+	
+	@Override
 	public List<EmployeeHistory> getAllEmpNewReviewForManager(int managerId) {
 		return reviewDAO.getAllEmpNewReviewForManager(managerId);
 	}
+
+
 
 }

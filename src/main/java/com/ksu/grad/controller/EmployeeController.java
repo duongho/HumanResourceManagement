@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ksu.grad.authentication.SecurityConstants;
 import com.ksu.grad.entity.Employee;
 import com.ksu.grad.pojo.EmployeePOJO;
 import com.ksu.grad.service.EmployeeService;
@@ -57,6 +58,8 @@ public class EmployeeController {
     	
     		
     }
+    
+    
     @RequestMapping(value="/quit/{empId}", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<String>  terminateEmployee(@PathVariable int empId){
@@ -66,8 +69,18 @@ public class EmployeeController {
     	}else {    	
     		return new ResponseEntity<String>("Not Quit", HttpStatus.OK);
     	}
-    	
     }
     
+    
+    @RequestMapping(value="/{username}/password/recovery", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<String>  recoverPassword(@PathVariable("username") String username){
+    	
+		String password = empService.recoverPassword(username);
+		
+        String jsonString = "{\"password\":" + "\"" +password + "\"}";
+		
+		return new ResponseEntity<String>(jsonString, HttpStatus.OK);
+    } 
  
 }

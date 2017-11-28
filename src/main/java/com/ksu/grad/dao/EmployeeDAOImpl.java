@@ -13,6 +13,7 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import com.ksu.grad.entity.Employee;
+import com.ksu.grad.entity.Login;
 
 @Transactional
 @Repository
@@ -34,6 +35,8 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 			"ON a.ID = b.ManagerId ";
 	
 	private static final String QUIT_EMPLOYEE ="UPDATE Employee e set e.isActive=0 where e.id=?";
+	
+	private static final String UPDATE_PASSWORD= "UPDATE Login a SET a.Password= :password WHERE a.UserName= :username";
 	
 	@Override
 	public List<Employee> getAllEmployees() {
@@ -89,6 +92,23 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 			return false;
 		}
 			
+	}
+
+	/**
+	 * return true if no exception occurs
+	 */
+	@Override
+	public boolean updatePassword(String username, String encryptPassword) {
+		
+		boolean b = false;
+		Query q = entityManager.createNativeQuery(UPDATE_PASSWORD, Login.class);
+		q.setParameter("username", username);
+		q.setParameter("password", encryptPassword);
+		
+		q.executeUpdate();
+		b=true;
+		
+		return b;
 	}
 
 }

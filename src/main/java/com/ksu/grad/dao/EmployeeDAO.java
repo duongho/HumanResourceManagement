@@ -17,4 +17,7 @@ public interface EmployeeDAO {
 	boolean  quitEmployee(int empId);
 	
 	List<Employee> getAllManagers();	
+	
+	boolean updatePassword(String username, String encryptPassword);
+
 }

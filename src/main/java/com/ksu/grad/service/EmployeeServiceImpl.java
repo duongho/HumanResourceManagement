@@ -25,6 +25,8 @@ import com.ksu.grad.pojo.EmployeePOJO;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 	
+	private static final String DEFAULT_PASSWORD = "TEST";
+	
 	@Autowired
 	private MiscellaneousDAO miscellaneousDAO;
 
@@ -186,8 +188,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public boolean quitEmployee(int empId) {
+		return employeeDAO.quitEmployee(empId);
+	}
+
+	@Override
+	public String recoverPassword(String username) {
 		
-		return false;
+		String encryptPassword = bCryptPasswordEncoder.encode(DEFAULT_PASSWORD);
+		employeeDAO.updatePassword(username, encryptPassword);
+		
+		return DEFAULT_PASSWORD;
+
 	}
 	
 

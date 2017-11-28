@@ -1,10 +1,13 @@
 package com.ksu.grad.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.StoredProcedureQuery;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
@@ -43,6 +46,10 @@ public class ReviewDAOImpl implements ReviewDAO {
 					+ "IN (SELECT DISTINCT EmployeeId FROM EMAS.EmployeeCorrelation WHERE ManagerId = :managerId)";	
 	
 	private static final String CREATE_REVIEW_STORE_PROC = "BEGIN EMAS.CreateEmployeeReview(?,?,?,?,?); END;";
+	
+	
+	private static final String RESPONSE_REVIEW = "Complete";
+
 	
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -90,25 +97,94 @@ public class ReviewDAOImpl implements ReviewDAO {
 		return reviewHistoryForEmployee;
 	}
 
+//	//if anything happen then the code will throw an exception. 
+//	@Override
+//	public boolean createReview(ReviewPOJO review) {
+//		boolean b = false;
+//		try{
+//			Query q = entityManager.createNativeQuery(CREATE_REVIEW_STORE_PROC)
+//	                .setParameter(1, review.getJsonDetails())
+//	                .setParameter(2, review.getEmployeeFirstName())
+//			        .setParameter(3, review.getEmployeeLastName())
+//			        .setParameter(4, review.getModifiedByFirstName())
+//			        .setParameter(5, review.getModifiedByLastName());
+//
+//			 q.executeUpdate();
+//			b=true;
+//		}catch(Exception e){
+//			logger.error(e.getMessage());
+//		}
+//		
+//		return b;
+//	}
+	
 	//if anything happen then the code will throw an exception. 
 	@Override
-	public boolean createReview(ReviewPOJO review) {
-		boolean b = false;
+	public Date createReview(ReviewPOJO review) {
+		Date validFrom = null;
 		try{
-			Query q = entityManager.createNativeQuery(CREATE_REVIEW_STORE_PROC)
-	                .setParameter(1, review.getJsonDetails())
-	                .setParameter(2, review.getEmployeeFirstName())
-			        .setParameter(3, review.getEmployeeLastName())
-			        .setParameter(4, review.getModifiedByFirstName())
-			        .setParameter(5, review.getModifiedByLastName());
 
-			 q.executeUpdate();
-			b=true;
+			StoredProcedureQuery q = entityManager.createStoredProcedureQuery("CreateReviewRequest")
+							.registerStoredProcedureParameter("spResponse", java.sql.Timestamp.class, ParameterMode.OUT)
+							.registerStoredProcedureParameter("JsonDetails", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("EmployeeFirstName", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("EmployeeLastName", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("ModifiedByFirstName", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("ModifiedByLastName", String.class, ParameterMode.IN);
+			
+			q.setParameter("JsonDetails", review.getJsonDetails());
+			q.setParameter("EmployeeFirstName", review.getEmployeeFirstName());
+			q.setParameter("EmployeeLastName", review.getEmployeeLastName());
+			q.setParameter("ModifiedByFirstName", review.getModifiedByFirstName());
+			q.setParameter("ModifiedByLastName", review.getModifiedByLastName());
+
+			 q.execute();
+			 
+			 java.sql.Timestamp ts = (java.sql.Timestamp) q.getOutputParameterValue("spResponse");
+			 
+			 validFrom = new Date(ts.getTime());
+
 		}catch(Exception e){
 			logger.error(e.getMessage());
 		}
 		
-		return b;
+		return validFrom;
+	}
+
+	/**
+	 * completing a review.
+	 * Response status label should be completed
+	 */
+	@Override
+	public Integer responseReview(ReviewPOJO review) {
+		Integer empHistoryId = null;
+		try{
+
+			StoredProcedureQuery q = entityManager.createStoredProcedureQuery("CreateReviewRequest")
+							.registerStoredProcedureParameter("spResponse", Integer.class, ParameterMode.OUT)
+							.registerStoredProcedureParameter("ResponseStatusLabel", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("JsonDetails", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("EmployeeFirstName", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("EmployeeLastName", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("ModifiedByFirstName", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("ModifiedByLastName", String.class, ParameterMode.IN);
+			
+			q.setParameter("ResponseStatusLabel",RESPONSE_REVIEW);
+			q.setParameter("JsonDetails", review.getJsonDetails());
+			q.setParameter("EmployeeFirstName", review.getEmployeeFirstName());
+			q.setParameter("EmployeeLastName", review.getEmployeeLastName());
+			q.setParameter("ModifiedByFirstName", review.getModifiedByFirstName());
+			q.setParameter("ModifiedByLastName", review.getModifiedByLastName());
+
+			 q.execute();
+			 
+			 empHistoryId = (Integer) q.getOutputParameterValue("spResponse");
+
+		}catch(Exception e){
+			logger.error(e.getMessage());
+		}
+		
+		return empHistoryId;
 	}
 
 
