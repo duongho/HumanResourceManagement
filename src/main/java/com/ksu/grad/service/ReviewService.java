@@ -14,5 +14,5 @@ public interface ReviewService {
 	
 	public List<EmployeeHistory> getAllEmpNewReviewForManager(int managerId);
 	
-	public Integer responseReview(ReviewPOJO review);
+	public Date responseReview(ReviewPOJO review);
 }

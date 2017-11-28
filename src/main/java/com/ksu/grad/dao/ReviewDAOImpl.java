@@ -8,14 +8,12 @@ import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.StoredProcedureQuery;
-import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import com.ksu.grad.entity.EmployeeHistory;
-import com.ksu.grad.entity.Review;
 import com.ksu.grad.pojo.ReviewPOJO;
 
 @Transactional
@@ -44,8 +42,6 @@ public class ReviewDAOImpl implements ReviewDAO {
 					+ " AND b.IsFinal =0 "
 					+ " AND a.EmployeeId "
 					+ "IN (SELECT DISTINCT EmployeeId FROM EMAS.EmployeeCorrelation WHERE ManagerId = :managerId)";	
-	
-	private static final String CREATE_REVIEW_STORE_PROC = "BEGIN EMAS.CreateEmployeeReview(?,?,?,?,?); END;";
 	
 	
 	private static final String RESPONSE_REVIEW = "Complete";
@@ -156,12 +152,12 @@ public class ReviewDAOImpl implements ReviewDAO {
 	 * Response status label should be completed
 	 */
 	@Override
-	public Integer responseReview(ReviewPOJO review) {
-		Integer empHistoryId = null;
+	public Date responseReview(ReviewPOJO review) {
+		Date validFrom = null;
 		try{
 
-			StoredProcedureQuery q = entityManager.createStoredProcedureQuery("CreateReviewRequest")
-							.registerStoredProcedureParameter("spResponse", Integer.class, ParameterMode.OUT)
+			StoredProcedureQuery q = entityManager.createStoredProcedureQuery("CreateReviewResponse")
+							.registerStoredProcedureParameter("spResponse", java.sql.Timestamp.class, ParameterMode.OUT)
 							.registerStoredProcedureParameter("ResponseStatusLabel", String.class, ParameterMode.IN)
 							.registerStoredProcedureParameter("JsonDetails", String.class, ParameterMode.IN)
 							.registerStoredProcedureParameter("EmployeeFirstName", String.class, ParameterMode.IN)
@@ -178,13 +174,13 @@ public class ReviewDAOImpl implements ReviewDAO {
 
 			 q.execute();
 			 
-			 empHistoryId = (Integer) q.getOutputParameterValue("spResponse");
+			 validFrom = (Date) q.getOutputParameterValue("spResponse");
 
 		}catch(Exception e){
 			logger.error(e.getMessage());
 		}
 		
-		return empHistoryId;
+		return validFrom;
 	}
 
 

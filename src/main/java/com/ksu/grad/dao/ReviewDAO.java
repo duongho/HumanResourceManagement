@@ -12,5 +12,5 @@ public interface ReviewDAO {
 	public List<EmployeeHistory> getAllReviewsForEmployeeId(int empId);
 	public List<EmployeeHistory> getAllEmpNewReviewForManager(int managerId);
 	public Date createReview(ReviewPOJO review);
-	public Integer responseReview(ReviewPOJO review);
+	public Date responseReview(ReviewPOJO review);
 }

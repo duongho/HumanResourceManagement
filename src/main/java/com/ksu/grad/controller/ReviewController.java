@@ -1,5 +1,6 @@
 package com.ksu.grad.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -63,11 +64,13 @@ public class ReviewController {
 	 * @return
 	 */
 	@RequestMapping(value="create", method=RequestMethod.POST)
-	public ResponseEntity<Date> createReview(@RequestBody ReviewPOJO newReview){
+	public ResponseEntity<String> createReview(@RequestBody ReviewPOJO newReview){
 		
 		Date validFrom = reviewService.createReview(newReview);
 		
-		return new ResponseEntity<Date>(validFrom, HttpStatus.OK);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		
+		return new ResponseEntity<String>(sdf.format(validFrom), HttpStatus.OK);
 		
 	} 
 	
@@ -76,11 +79,13 @@ public class ReviewController {
 	 * @return
 	 */
 	@RequestMapping(value="response", method=RequestMethod.POST)
-	public ResponseEntity<Integer> responseReview(@RequestBody ReviewPOJO newReview){
+	public ResponseEntity<String> responseReview(@RequestBody ReviewPOJO newReview){
 		
-		Integer empHistoryId = reviewService.responseReview(newReview);
+		Date validFrom = reviewService.responseReview(newReview);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
 		
-		return new ResponseEntity<Integer>(empHistoryId, HttpStatus.OK);
+		return new ResponseEntity<String>(sdf.format(validFrom), HttpStatus.OK);
 		
 	} 
 	

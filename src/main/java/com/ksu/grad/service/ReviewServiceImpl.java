@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.ksu.grad.dao.ReviewDAO;
 import com.ksu.grad.entity.EmployeeHistory;
-import com.ksu.grad.entity.Review;
 import com.ksu.grad.pojo.ReviewPOJO;
 
 @Service
@@ -34,7 +33,7 @@ public class ReviewServiceImpl implements ReviewService{
 	}
 
 	@Override
-	public Integer responseReview(ReviewPOJO review) {
+	public Date responseReview(ReviewPOJO review) {
 		return reviewDAO.responseReview(review);
 
 	}
