@@ -1,9 +1,12 @@
 package com.ksu.grad.dao;
 
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.StoredProcedureQuery;
 import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
@@ -44,13 +47,10 @@ public class LeaveDAOImpl implements LeaveDAO{
 			" JOIN EMAS.Status s ON atst.StatusId = s.id WHERE a.Label = 'Sick Leave' AND atst.IsFinal =0 " +
 			 "  AND eh.EmployeeId IN (SELECT DISTINCT EmployeeId FROM EMAS.EmployeeCorrelation WHERE ManagerId = :managerId)";
 	
-	private static final  String APPROVE_LEAVE_REQUEST = "Update  ";
-	
-	private static final  String ATTRIBUTE_FOR_CREATE_LEAVE ="SELECT * from Attribute a where a.id=3 ";
-	private static final  String STATUS_FOR_CREATE_LEAVE ="SELECT * from Status s where s.id=5 ";
-	
-	private static final String CREATE_LEAVE_STORE_PROC = "BEGIN EMAS.CreateEmployeeLeave(?,?,?,?,?); END;";
-	
+
+	private static final String APPROVE_LEAVE = "Approved";
+	private static final String  DENY_LEAVE = "Denied";
+		
 	/**
 	 * get all leave request for an emplyee
 	 */
@@ -76,34 +76,6 @@ public class LeaveDAOImpl implements LeaveDAO{
 		return employeeHistory;	
 	}
 	
-	@Override
-	public boolean approveLeaveRequest(){
-		boolean status = true;
-		Query q = entityManager.createNativeQuery(APPROVE_LEAVE_REQUEST, EmployeeHistory.class);
-		 q.executeUpdate();
-		return status;	
-	}
-/**
- * get Attibute object for creating leave
- * return attibute Obj with "Sick Leave" attribute
- */
-	@Override
-	public Attribute getAttributeforCreate() {
-		Query q = entityManager.createNativeQuery(ATTRIBUTE_FOR_CREATE_LEAVE, Attribute.class);
-		Attribute attr = (Attribute) q.getResultList().get(0);
-		return attr;
-	}
-	/**
-	 * get Status for creating Leave.
-	 * return status Object with "Created" status
-	 * 
-	 */
-	@Override
-	public Status getStatusforCreate() {
-		Query q = entityManager.createNativeQuery(STATUS_FOR_CREATE_LEAVE, Status.class);
-		Status status = (Status) q.getResultList().get(0);
-		return status;
-	}
  
 	@Override
 	public List<EmployeeHistory> getAllPendingEmpRequestForManager(int managerId) {
@@ -112,29 +84,110 @@ public class LeaveDAOImpl implements LeaveDAO{
 		List<EmployeeHistory> employeeHistory = q.getResultList();
 		return employeeHistory;	
 	}
+
+	
 	/**
-	 * Create Leave
-	 * @param leave POJO
-	 * return boolean
+	 * calling store proc CreateLeaveRequest to create a leave record
 	 */
-
 	@Override
-	public boolean createLeave(LeavePOJO leave) {
-		boolean b = false;
+	public Date createLeave(LeavePOJO leave) {
+		Date validFrom = null;
 		try{
-			Query q = entityManager.createNativeQuery(CREATE_LEAVE_STORE_PROC)
-	                .setParameter(1, leave.getJsonDetails())
-	                .setParameter(2, leave.getEmployeeFirstName())
-			        .setParameter(3, leave.getEmployeeLastName())
-			        .setParameter(4, leave.getModifiedByFirstName())
-			        .setParameter(5, leave.getModifiedByLastName());
 
-			 q.executeUpdate();
-			b=true;
+			StoredProcedureQuery q = entityManager.createStoredProcedureQuery("CreateLeaveRequest")
+							.registerStoredProcedureParameter("spResponse", java.sql.Timestamp.class, ParameterMode.OUT)
+							.registerStoredProcedureParameter("JsonDetails", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("EmployeeFirstName", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("EmployeeLastName", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("ModifiedByFirstName", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("ModifiedByLastName", String.class, ParameterMode.IN);
+			
+			q.setParameter("JsonDetails", leave.getJsonDetails());
+			q.setParameter("EmployeeFirstName", leave.getEmployeeFirstName());
+			q.setParameter("EmployeeLastName", leave.getEmployeeLastName());
+			q.setParameter("ModifiedByFirstName", leave.getModifiedByFirstName());
+			q.setParameter("ModifiedByLastName", leave.getModifiedByLastName());
+
+			 q.execute();
+			 
+			 java.sql.Timestamp ts = (java.sql.Timestamp) q.getOutputParameterValue("spResponse");
+			 
+			 validFrom = new Date(ts.getTime());
+
 		}catch(Exception e){
 			logger.error(e.getMessage());
 		}
-		return b;
+		
+		return validFrom;
+	}
+
+	/**
+	 * this method is strictly to approve Leave. Use DenyLeave if we want to deny a leave request
+	 */
+	@Override
+	public Date approveLeave(LeavePOJO leave) {
+		Date validFrom = null;
+		try{
+
+			StoredProcedureQuery q = entityManager.createStoredProcedureQuery("CreateLeaveResponse")
+							.registerStoredProcedureParameter("spResponse", java.sql.Timestamp.class, ParameterMode.OUT)
+							.registerStoredProcedureParameter("ResponseStatusLabel", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("JsonDetails", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("EmployeeFirstName", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("EmployeeLastName", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("ModifiedByFirstName", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("ModifiedByLastName", String.class, ParameterMode.IN);
+			
+			q.setParameter("ResponseStatusLabel",APPROVE_LEAVE);
+			q.setParameter("JsonDetails", leave.getJsonDetails());
+			q.setParameter("EmployeeFirstName", leave.getEmployeeFirstName());
+			q.setParameter("EmployeeLastName", leave.getEmployeeLastName());
+			q.setParameter("ModifiedByFirstName", leave.getModifiedByFirstName());
+			q.setParameter("ModifiedByLastName", leave.getModifiedByLastName());
+
+			 q.execute();
+			 
+			 validFrom = (Date) q.getOutputParameterValue("spResponse");
+
+		}catch(Exception e){
+			logger.error(e.getMessage());
+		}
+		
+		return validFrom;
+	}	
+	
+	
+	
+	@Override
+	public Date denyLeave(LeavePOJO leave) {
+		Date validFrom = null;
+		try{
+
+			StoredProcedureQuery q = entityManager.createStoredProcedureQuery("CreateLeaveResponse")
+							.registerStoredProcedureParameter("spResponse", java.sql.Timestamp.class, ParameterMode.OUT)
+							.registerStoredProcedureParameter("ResponseStatusLabel", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("JsonDetails", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("EmployeeFirstName", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("EmployeeLastName", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("ModifiedByFirstName", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("ModifiedByLastName", String.class, ParameterMode.IN);
+			
+			q.setParameter("ResponseStatusLabel", DENY_LEAVE);
+			q.setParameter("JsonDetails", leave.getJsonDetails());
+			q.setParameter("EmployeeFirstName", leave.getEmployeeFirstName());
+			q.setParameter("EmployeeLastName", leave.getEmployeeLastName());
+			q.setParameter("ModifiedByFirstName", leave.getModifiedByFirstName());
+			q.setParameter("ModifiedByLastName", leave.getModifiedByLastName());
+
+			 q.execute();
+			 
+			 validFrom = (Date) q.getOutputParameterValue("spResponse");
+
+		}catch(Exception e){
+			logger.error(e.getMessage());
+		}
+		
+		return validFrom;
 	}	
 
 }

@@ -92,27 +92,6 @@ public class ReviewDAOImpl implements ReviewDAO {
 		
 		return reviewHistoryForEmployee;
 	}
-
-//	//if anything happen then the code will throw an exception. 
-//	@Override
-//	public boolean createReview(ReviewPOJO review) {
-//		boolean b = false;
-//		try{
-//			Query q = entityManager.createNativeQuery(CREATE_REVIEW_STORE_PROC)
-//	                .setParameter(1, review.getJsonDetails())
-//	                .setParameter(2, review.getEmployeeFirstName())
-//			        .setParameter(3, review.getEmployeeLastName())
-//			        .setParameter(4, review.getModifiedByFirstName())
-//			        .setParameter(5, review.getModifiedByLastName());
-//
-//			 q.executeUpdate();
-//			b=true;
-//		}catch(Exception e){
-//			logger.error(e.getMessage());
-//		}
-//		
-//		return b;
-//	}
 	
 	//if anything happen then the code will throw an exception. 
 	@Override
