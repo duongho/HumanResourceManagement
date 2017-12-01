@@ -34,7 +34,7 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 	private static final String SELECT_ALL_MANAGERS = "SELECT DISTINCT a.* FROM EMAS.Employee a INNER JOIN EMAS.EmployeeCorrelation b \n" + 
 			"ON a.ID = b.ManagerId ";
 	
-	private static final String QUIT_EMPLOYEE ="UPDATE Employee e set e.isActive=0 where e.id=?";
+	private static final String QUIT_EMPLOYEE ="UPDATE Employee e set e.isActive=0 where e.id= :id";
 	
 	private static final String UPDATE_PASSWORD= "UPDATE Login a SET a.Password= :password WHERE a.UserName= :username";
 	
@@ -85,6 +85,7 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 	@Override
 	public boolean quitEmployee(int empId) {
 		Query q = entityManager.createNativeQuery(QUIT_EMPLOYEE, Employee.class);
+		q.setParameter("id", empId);
 		int status = q.executeUpdate();
 		if (status==1) {
 			return true;

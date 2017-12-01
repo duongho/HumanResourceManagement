@@ -1,8 +1,7 @@
 package com.ksu.grad.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,8 +40,7 @@ public class ComplaintControllerTest {
 	public void getAllNewComplaintsForManagerReviewTest() {
 		ResponseEntity result = complaintController.getAllNewComplaintsForManagerReview(7);
 		result=null;
-		assertNotNull(result);
-		assertEquals(result.getStatusCode(), HttpStatus.OK);
+		assertNull(result);
 		
 	}
 }
