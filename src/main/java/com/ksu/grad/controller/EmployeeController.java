@@ -48,14 +48,20 @@ public class EmployeeController {
     }	
     
     //TODO: do the actual implementation...
-    @RequestMapping(value="/update/", method = RequestMethod.POST)
+    @RequestMapping(value="/update", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<Employee> updateProfile(@RequestBody EmployeePOJO newEmployee){   
     	
-    	Employee emp = null;
-
-        return new ResponseEntity<Employee>(emp, HttpStatus.BAD_REQUEST);
+    	//only address, phone number, and email are updatable
+    	Employee updatedEmp = empService.updateEmployee(newEmployee);
     	
+    	if (updatedEmp == null ){
+        	return new ResponseEntity<Employee>(updatedEmp, HttpStatus.BAD_REQUEST);
+    	}
+    	
+    	
+    	
+    	return new ResponseEntity<Employee>(updatedEmp, HttpStatus.OK);
     		
     }
     

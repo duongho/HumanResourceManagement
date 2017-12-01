@@ -3,6 +3,7 @@ package com.ksu.grad.dao;
 import java.util.List;
 
 import com.ksu.grad.entity.Employee;
+import com.ksu.grad.entity.State;
 
 public interface EmployeeDAO {
 
@@ -19,5 +20,9 @@ public interface EmployeeDAO {
 	List<Employee> getAllManagers();	
 	
 	boolean updatePassword(String username, String encryptPassword);
-
+	
+	Employee getEmployeeByUserName (String userName);
+	
+	State getStateByName (String name);
+	
 }

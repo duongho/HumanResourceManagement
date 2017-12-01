@@ -14,6 +14,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import com.ksu.grad.entity.Employee;
 import com.ksu.grad.entity.Login;
+import com.ksu.grad.entity.State;
 
 @Transactional
 @Repository
@@ -29,6 +30,8 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 	
 	private static final String SELECT_EMPLOYEE_PROFILE_FOR_EMP_ID=
 			"SELECT a.* FROM EMAS.Employee a WHERE a.ID = :empId";
+	
+	private static final String SELECT_STATE_BY_NAME  = "SELECT a.* FROM EMAS.State a WHERE a.Name= :name";
 
 
 	private static final String SELECT_ALL_MANAGERS = "SELECT DISTINCT a.* FROM EMAS.Employee a INNER JOIN EMAS.EmployeeCorrelation b \n" + 
@@ -37,6 +40,8 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 	private static final String QUIT_EMPLOYEE ="UPDATE Employee e set e.isActive=0 where e.id= :id";
 	
 	private static final String UPDATE_PASSWORD= "UPDATE Login a SET a.Password= :password WHERE a.UserName= :username";
+	
+	private static final String SELECT_EMPLOYEE_BY_USERNAME = "SELECT e.* FROM EMAS.Employee e INNER JOIN EMAS.Login a ON a.ID = e.PersonId WHERE a.UserName = :userName";
 	
 	@Override
 	public List<Employee> getAllEmployees() {
@@ -53,7 +58,7 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 		
 		List<Employee> employees = q.getResultList();
 		
-		if (employees == null){
+		if (employees == null || employees.isEmpty()){
 			return null;
 		}
 		
@@ -68,11 +73,9 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 
 	@Override
 	public Employee updateEmployee(Employee employee) {
-		Session session = (Session) entityManager.getDelegate();
-		Criteria criteria = session.createCriteria(Employee.class,"employeeClass");
-		criteria.add(Restrictions.eq("employeeClass.id",employee.getId()));
-		session.saveOrUpdate(employee);
-		return employee;
+		Employee e = entityManager.merge(employee);
+		
+		return e;
 	}
 
 	@Override
@@ -112,4 +115,31 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 		return b;
 	}
 
+	@Override
+	public Employee getEmployeeByUserName(String userName) {
+		
+		Query q = entityManager.createNativeQuery(SELECT_EMPLOYEE_BY_USERNAME, Employee.class);
+		q.setParameter("userName", userName);
+		
+		List<Employee> empList = q.getResultList();
+		if (empList == null || empList.isEmpty()){
+			return null;
+		}
+		
+		return empList.get(0);
+	}
+
+	@Override
+	public State getStateByName(String name) {
+		
+		Query q = entityManager.createNativeQuery(SELECT_STATE_BY_NAME, State.class);
+		q.setParameter("name", name);
+		
+		List<State> states = q.getResultList();
+		if (states == null || states.isEmpty()){
+			return null;
+		}
+		
+		return states.get(0);
+	}
 }

@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.ksu.grad.controller.EmployeeController;
+import com.ksu.grad.entity.Employee;
 import com.ksu.grad.pojo.EmployeePOJO;
 
 @SpringBootTest
@@ -67,6 +68,22 @@ public class EmployeeControllerTest {
 		ResponseEntity result =  employeeController.recoverPassword("rose");
 		assertNotNull(result);
 		assertEquals(result.getStatusCode(), HttpStatus.OK);
+	}
+	
+	@Test
+	public void updateEmployee(){
+		EmployeePOJO employeeModel = new EmployeePOJO();
+		employeeModel.setAddress("4217 Birchwood Way");
+		employeeModel.setCity("Marietta");
+		employeeModel.setCountry("United States");
+		employeeModel.setEmailAddress("duonghose2gmail@yahoo.com");
+		employeeModel.setUserName("duong");
+		employeeModel.setPhone("123-555-1111");
+		employeeModel.setState("MyState");
+		employeeModel.setZipcode("12323");
+		
+		ResponseEntity<Employee> e = employeeController.updateProfile(employeeModel);
+		assertNotNull(e);
 	}
 }
 

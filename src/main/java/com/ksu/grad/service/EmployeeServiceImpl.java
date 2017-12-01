@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.ksu.grad.dao.EmployeeDAO;
 import com.ksu.grad.dao.MiscellaneousDAO;
 import com.ksu.grad.entity.Address;
+import com.ksu.grad.entity.Country;
 import com.ksu.grad.entity.Employee;
 import com.ksu.grad.entity.Login;
 import com.ksu.grad.entity.Person;
@@ -116,62 +117,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return pwd;
 	}
 
-	@Override
-	public Employee updateProfile(String firstname, String lastname, String address, String email, String phone,
-			String salary, String startDate, String username, String city, String statecode, String zipcode,
-			String password, int id) throws ParseException {
-		Employee employee = employeeDAO.getEmployeeById(id);
-		Employee updatedEmployee = null;
-		if(employee!=null) {
-			DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
-			Date date = format.parse(startDate);
-			if(firstname!=null || !firstname.equals("")) {
-				employee.getPerson().setFirstName(firstname);
-			}if(lastname!=null || !lastname.equals("")) {
-				employee.getPerson().setLastName(lastname);
-			}
-			if(address!=null || !address.equals("")) {
-				employee.getPerson().getAddress().setAddress(address);
-			}if(city!=null || !city.equals("")) {
-				employee.getPerson().getAddress().setCity(city);
-			}if(statecode!=null || !statecode.equals("")) {
-				
-			}if(zipcode!=null || !zipcode.equals("")) {
-				employee.getPerson().getAddress().setZipcode(zipcode);
-			}
-			if(email!=null || !email.equals("")) {
-				employee.getPerson().setEmailAddress(email);
-			}
-			if(phone!=null || !phone.equals("")) {
-				employee.getPerson().setPhone(phone);
-			}
-			if(salary!=null || !salary.equals("")) {			
-				employee.setSalary(new BigDecimal(salary));
-			}
-			if(startDate!=null || !startDate.equals("")) {
-				employee.setStartDate(date);
-			}
-			if(username!=null || !username.equals("")) {
-				employee.getLogin().setUserName(username);
-			}if(password!=null || !password.equals("")) {
-				employee.getLogin().setPassword(password);
-			}
-			
-			List<State> lstStates = miscellaneousDAO.getAllStates();
-			State stat = null;
-			if(statecode!=null || statecode.equals("")) {
-			for(int i=0;i<lstStates.size();i++) {
-				stat = (State) lstStates.get(i);
-				if(stat.getCode().equals(statecode)) {
-					employee.getPerson().getAddress().setState(stat);
-				}
-			}
-		}
-			
-			updatedEmployee = employeeDAO.updateEmployee(employee);
-		}
-		return updatedEmployee;
-	}
 
 	@Override
 	public List<Employee> getAllManagers(){
@@ -199,6 +144,53 @@ public class EmployeeServiceImpl implements EmployeeService {
 		
 		return DEFAULT_PASSWORD;
 
+	}
+
+	@Override
+	public Employee updateEmployee(EmployeePOJO newEmployee) {
+		
+		Employee e = employeeDAO.getEmployeeByUserName(newEmployee.getUserName());
+		
+		if (e == null){
+			return null;
+		}
+		
+		//old address state country
+		Person person = e.getPerson();
+		Address address = person.getAddress();
+		State state = address.getState();
+		Country c = state.getCountry();
+		
+		if (address.getAddress().toLowerCase().trim() != newEmployee.getAddress().toLowerCase().trim()){
+			address = new Address();
+			address.setCity(newEmployee.getCity());
+			address.setZipcode(newEmployee.getZipcode());
+			address.setAddress(newEmployee.getAddress());
+			
+			if (state.getName() != newEmployee.getState()){
+				
+				state = employeeDAO.getStateByName(newEmployee.getState());
+				if (state ==null){
+					state = new State();
+					state.setName(newEmployee.getState());
+					state.setCode("31");
+					state.setCountry(c); //employee can not change country. Only state and address 
+				}
+			}
+			
+			address.setState(state);
+		}
+		
+		person.setEmailAddress(newEmployee.getEmailAddress());
+		person.setPhone(newEmployee.getPhone());
+		
+		person.setAddress(address);
+		
+		e.setPerson(person);
+		
+		Employee updatedEmp = employeeDAO.updateEmployee(e);
+		
+		return updatedEmp;
 	}
 	
 

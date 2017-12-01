@@ -14,9 +14,7 @@ public interface EmployeeService {
 	
 	Employee registerEmployee(EmployeePOJO employeeModel) throws ParseException;
 	
-	Employee updateProfile(String firstname, String lastname, String address, 
-    		String email, String phone,String salary, String startDate,String username, 
-    		String city, String state, String zipcode,String password,int id) throws ParseException;
+	Employee updateEmployee(EmployeePOJO newEmployee);
 		
 	List<Employee> getAllManagers();
 	
