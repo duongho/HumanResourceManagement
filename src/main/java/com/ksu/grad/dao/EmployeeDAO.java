@@ -19,5 +19,7 @@ public interface EmployeeDAO {
 	List<Employee> getAllManagers();	
 	
 	boolean updatePassword(String username, String encryptPassword);
+	
+	Employee getEmployeeByFirstandLastName(String firstName, String lastName);
 
 }

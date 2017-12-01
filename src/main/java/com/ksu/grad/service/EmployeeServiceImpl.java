@@ -200,6 +200,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return DEFAULT_PASSWORD;
 
 	}
+
+	@Override
+	public Employee getEmployeeByFirstandLastName(String firstName, String lastName) {
+		Employee empObj = employeeDAO.getEmployeeByFirstandLastName(firstName, lastName);
+		return empObj;
+	}
 	
 
 }

@@ -71,7 +71,7 @@ public class EmployeeController {
     	}
     }
     
-    
+        
     @RequestMapping(value="/{username}/password/recovery", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<String>  recoverPassword(@PathVariable("username") String username){
@@ -81,6 +81,19 @@ public class EmployeeController {
         String jsonString = "{\"password\":" + "\"" +password + "\"}";
 		
 		return new ResponseEntity<String>(jsonString, HttpStatus.OK);
-    } 
+    }
+    
+    
+    @RequestMapping(value="/find/{firstname}/{lastname}", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<Employee>  findEmployeebyFirstandLastname(@PathVariable("firstname") String firstname, @PathVariable("lastname") String lastname){
+		Employee emp = empService.getEmployeeByFirstandLastName(firstname, lastname);
+		if(emp==null) {
+			return new ResponseEntity<Employee>(emp, HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<Employee>(emp, HttpStatus.OK);    	
+    }
+    
+    
  
 }

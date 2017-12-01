@@ -34,9 +34,13 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 	private static final String SELECT_ALL_MANAGERS = "SELECT DISTINCT a.* FROM EMAS.Employee a INNER JOIN EMAS.EmployeeCorrelation b \n" + 
 			"ON a.ID = b.ManagerId ";
 	
-	private static final String QUIT_EMPLOYEE ="UPDATE Employee e set e.isActive=0 where e.id=?";
+	private static final String QUIT_EMPLOYEE ="UPDATE Employee e set e.isActive=0 where e.id= :id";
 	
 	private static final String UPDATE_PASSWORD= "UPDATE Login a SET a.Password= :password WHERE a.UserName= :username";
+	
+	private static final String SELECT_EMPLOYEE_BY_FIRSTNAME_LASTNAME ="SELECT e.* FROM EMAS.Employee e INNER JOIN EMAS.Person a \n" + 
+			"ON a.ID = e.PersonId \n" + 
+			"WHERE a.FirstName =? AND a.LastName = ?";
 	
 	@Override
 	public List<Employee> getAllEmployees() {
@@ -49,14 +53,11 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 	@Override
 	public Employee getEmployeeById(int empId) {
 		Query q = entityManager.createNativeQuery(SELECT_EMPLOYEE_PROFILE_FOR_EMP_ID, Employee.class);
-		q.setParameter("empId", empId);
-		
-		List<Employee> employees = q.getResultList();
-		
+		q.setParameter("empId", empId);		
+		List<Employee> employees = q.getResultList();		
 		if (employees == null){
 			return null;
-		}
-		
+		}		
 		return employees.get(0);
 	}
 
@@ -85,6 +86,7 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 	@Override
 	public boolean quitEmployee(int empId) {
 		Query q = entityManager.createNativeQuery(QUIT_EMPLOYEE, Employee.class);
+		q.setParameter("id", empId);
 		int status = q.executeUpdate();
 		if (status==1) {
 			return true;
@@ -110,5 +112,20 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 		
 		return b;
 	}
-
+	
+	/**
+	 * select employee using first name and last name
+	 * return employee
+	 */
+	@Override
+	public Employee getEmployeeByFirstandLastName(String firstName, String lastName) {
+		Query q = entityManager.createNativeQuery(SELECT_EMPLOYEE_BY_FIRSTNAME_LASTNAME, Employee.class);
+		q.setParameter(1, firstName);	
+		q.setParameter(2, lastName);
+		List<Employee> employees = q.getResultList();		
+		if (employees == null){
+			return null;
+		}		
+		return employees.get(0);
+	}
 }
