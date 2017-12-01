@@ -55,7 +55,7 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 		Query q = entityManager.createNativeQuery(SELECT_EMPLOYEE_PROFILE_FOR_EMP_ID, Employee.class);
 		q.setParameter("empId", empId);		
 		List<Employee> employees = q.getResultList();		
-		if (employees == null){
+		if (employees.isEmpty()){
 			return null;
 		}		
 		return employees.get(0);
@@ -123,7 +123,7 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 		q.setParameter(1, firstName);	
 		q.setParameter(2, lastName);
 		List<Employee> employees = q.getResultList();		
-		if (employees == null){
+		if (employees.isEmpty()){
 			return null;
 		}		
 		return employees.get(0);
