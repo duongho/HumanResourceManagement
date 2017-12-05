@@ -14,4 +14,5 @@ public interface ComplaintDAO {
 	public List<EmployeeHistory> getAllComplaintsUnderManager(int managerId);	
 	public Date fileComplaint(ComplaintPOJO complaintPojo);
 	public Date responseComplaint(ComplaintPOJO complaintPojo);
+	public Date escalateComplaint(ComplaintPOJO complaintPojo);
 }

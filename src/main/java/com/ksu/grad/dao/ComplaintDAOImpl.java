@@ -46,7 +46,7 @@ public class ComplaintDAOImpl implements ComplaintDAO {
 	EntityManager em;
 	
 	private static final String RESPONSE_COMPLAINT = "Complete";
-
+	private static final String ESCALATE_COMPLAINT = "Escalate";
 
 	/**
 	 * this method gets back all the complaints for a specific employee in the employeehistory table
@@ -150,6 +150,42 @@ public class ComplaintDAOImpl implements ComplaintDAO {
 							.registerStoredProcedureParameter("ModifiedByLastName", String.class, ParameterMode.IN);
 			
 			q.setParameter("ResponseStatusLabel",RESPONSE_COMPLAINT);
+			q.setParameter("JsonDetails", complaint.getJsonDetails());
+			q.setParameter("EmployeeFirstName", complaint.getEmployeeFirstName());
+			q.setParameter("EmployeeLastName", complaint.getEmployeeLastName());
+			q.setParameter("ModifiedByFirstName", complaint.getModifiedByFirstName());
+			q.setParameter("ModifiedByLastName", complaint.getModifiedByLastName());
+
+			 q.execute();
+			 
+			 validFrom = (Date) q.getOutputParameterValue("spResponse");
+
+		}catch(Exception e){
+			logger.error(e.getMessage());
+		}
+		
+		return validFrom;
+	}
+
+	/**
+	 * escalate
+	 * Response status label should be escalated
+	 */
+	@Override
+	public Date escalateComplaint(ComplaintPOJO complaint) {
+		Date validFrom = null;
+		try{
+
+			StoredProcedureQuery q = em.createStoredProcedureQuery("CreateComplaintResponse")
+							.registerStoredProcedureParameter("spResponse", java.sql.Timestamp.class, ParameterMode.OUT)
+							.registerStoredProcedureParameter("ResponseStatusLabel", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("JsonDetails", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("EmployeeFirstName", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("EmployeeLastName", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("ModifiedByFirstName", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("ModifiedByLastName", String.class, ParameterMode.IN);
+			
+			q.setParameter("ResponseStatusLabel",ESCALATE_COMPLAINT);
 			q.setParameter("JsonDetails", complaint.getJsonDetails());
 			q.setParameter("EmployeeFirstName", complaint.getEmployeeFirstName());
 			q.setParameter("EmployeeLastName", complaint.getEmployeeLastName());

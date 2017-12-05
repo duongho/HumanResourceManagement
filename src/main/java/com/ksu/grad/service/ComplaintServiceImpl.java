@@ -40,6 +40,11 @@ public class ComplaintServiceImpl implements ComplaintService {
 	public Date responseComplaint(ComplaintPOJO complaint) {
 		return dao.responseComplaint(complaint);
 	}
+
+	@Override
+	public Date escalateComplaint(ComplaintPOJO complaintPojo) {
+		return dao.escalateComplaint(complaintPojo);
+	}
 	
 	
 }

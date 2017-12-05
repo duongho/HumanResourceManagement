@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.ksu.grad.controller.ComplaintController;
+import com.ksu.grad.controller.HumanResourceController;
 import com.ksu.grad.pojo.ComplaintPOJO;
 import com.ksu.grad.pojo.ReviewPOJO;
 
@@ -20,6 +21,8 @@ import com.ksu.grad.pojo.ReviewPOJO;
 public class ComplaintControllerTest {
 	@Autowired
 	private ComplaintController complaintController;
+	@Autowired
+	private HumanResourceController humanController;
 	
 	/**
 	 * test case for getting complaints from an employee
@@ -46,8 +49,8 @@ public class ComplaintControllerTest {
 		
 	}*/
 	
-	@Test		
-	public void createReviewTest() {
+	/*@Test		
+	public void createComplaintTest() {
 		ComplaintPOJO complaintPojo  = new ComplaintPOJO();		
 		complaintPojo.setEmployeeFirstName("Bob");
 		complaintPojo.setEmployeeLastName("Smith");
@@ -55,6 +58,18 @@ public class ComplaintControllerTest {
 		complaintPojo.setModifiedByLastName("Smith");
 		complaintPojo.setJsonDetails("testing with new complaint");
 		ResponseEntity result =  complaintController.createComplaint(complaintPojo);
+		assertNotNull(result);
+		assertEquals(result.getStatusCode(), HttpStatus.OK);		
+	}*/
+	@Test		
+	public void escalateComplaintTest() {
+		ComplaintPOJO complaintPojo  = new ComplaintPOJO();		
+		complaintPojo.setEmployeeFirstName("Bob");
+		complaintPojo.setEmployeeLastName("Smith");
+		complaintPojo.setModifiedByFirstName("Bob");
+		complaintPojo.setModifiedByLastName("Smith");
+		complaintPojo.setJsonDetails("escalate");
+		ResponseEntity result =  humanController.escalateComplaint(complaintPojo);
 		assertNotNull(result);
 		assertEquals(result.getStatusCode(), HttpStatus.OK);		
 	}

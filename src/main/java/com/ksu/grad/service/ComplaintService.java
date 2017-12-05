@@ -15,5 +15,6 @@ public interface ComplaintService {
 	List<EmployeeHistory> getAllComplaintsUnderManager(int managerId);
 	Date fileComplaint(ComplaintPOJO complaintPojo);
 	Date responseComplaint(ComplaintPOJO complaint);
+	Date escalateComplaint(ComplaintPOJO complaintPojo);
 	
 }
