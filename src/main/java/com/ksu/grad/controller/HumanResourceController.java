@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ksu.grad.entity.Employee;
+import com.ksu.grad.entity.EmployeeHistory;
+import com.ksu.grad.service.ComplaintService;
 import com.ksu.grad.service.EmployeeService;
 
 @Controller
@@ -21,6 +23,9 @@ public class HumanResourceController {
 	
 	@Autowired
 	public EmployeeService empService;
+	
+	@Autowired
+	ComplaintService complaintService;
 	
 	
 	@RequestMapping(value="get/manager/all", method = RequestMethod.GET)
@@ -40,5 +45,11 @@ public class HumanResourceController {
     	} 
     	return new ResponseEntity<Employee>(employee, HttpStatus.OK);
     }
+	
+	@GetMapping("all")
+	public ResponseEntity<List<EmployeeHistory>> getAllComplaints(){		
+		List<EmployeeHistory> complaintHistories = complaintService.getAllComplaints();		
+		return new ResponseEntity<List<EmployeeHistory>>(complaintHistories, HttpStatus.OK);
+	}
 
 }
