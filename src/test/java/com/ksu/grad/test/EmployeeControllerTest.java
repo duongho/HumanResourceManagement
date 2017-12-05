@@ -85,6 +85,12 @@ public class EmployeeControllerTest {
 		ResponseEntity<Employee> e = employeeController.updateProfile(employeeModel);
 		assertNotNull(e);
 	}
+		
+	public void getEmployeebyFirstlastName() {
+		ResponseEntity<Employee> result = employeeController.findEmployeebyFirstandLastname("Duong", "Ho");
+		assertNotNull(result);
+		assertEquals(result.getStatusCode(), HttpStatus.OK);
+	}
 }
 
 

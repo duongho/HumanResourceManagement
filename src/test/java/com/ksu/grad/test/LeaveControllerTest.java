@@ -56,7 +56,7 @@ public class LeaveControllerTest {
 		}
 	
 	@Test
-	public void denyLeave() {
+	public void denyLeaveTest() {
 		LeavePOJO leavePojo = new LeavePOJO();
 		leavePojo.setEmployeeFirstName("Albert");
 		leavePojo.setEmployeeLastName("Maine");

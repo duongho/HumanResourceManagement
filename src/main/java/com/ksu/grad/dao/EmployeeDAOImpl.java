@@ -42,6 +42,10 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 	private static final String UPDATE_PASSWORD= "UPDATE Login a SET a.Password= :password WHERE a.UserName= :username";
 	
 	private static final String SELECT_EMPLOYEE_BY_USERNAME = "SELECT e.* FROM EMAS.Employee e INNER JOIN EMAS.Login a ON a.ID = e.PersonId WHERE a.UserName = :userName";
+
+	private static final String SELECT_EMPLOYEE_BY_FIRSTNAME_LASTNAME ="SELECT e.* FROM EMAS.Employee e INNER JOIN EMAS.Person a \n" + 
+			"ON a.ID = e.PersonId \n" + 
+			"WHERE a.FirstName =? AND a.LastName = ?";
 	
 	@Override
 	public List<Employee> getAllEmployees() {
@@ -61,7 +65,7 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 		if (employees == null || employees.isEmpty()){
 			return null;
 		}
-		
+	
 		return employees.get(0);
 	}
 
@@ -141,5 +145,23 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 		}
 		
 		return states.get(0);
+
+	}
+	
+	
+	/**
+	 * select employee using first name and last name
+	 * return employee
+	 */
+	@Override
+	public Employee getEmployeeByFirstandLastName(String firstName, String lastName) {
+		Query q = entityManager.createNativeQuery(SELECT_EMPLOYEE_BY_FIRSTNAME_LASTNAME, Employee.class);
+		q.setParameter(1, firstName);	
+		q.setParameter(2, lastName);
+		List<Employee> employees = q.getResultList();		
+		if (employees.isEmpty()){
+			return null;
+		}		
+		return employees.get(0);
 	}
 }

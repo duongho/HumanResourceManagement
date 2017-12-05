@@ -1,19 +1,27 @@
 package com.ksu.grad.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.StoredProcedureQuery;
 import javax.transaction.Transactional;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
+import com.ksu.grad.entity.Complaint;
 import com.ksu.grad.entity.EmployeeHistory;
+import com.ksu.grad.pojo.ComplaintPOJO;
+import com.ksu.grad.pojo.ReviewPOJO;
 
 @Transactional
 @Repository
 public class ComplaintDAOImpl implements ComplaintDAO {
+	private static final Logger logger = Logger.getLogger(ComplaintDAOImpl.class);
 		
 	private static final String SELECT_COMPLAINTS_BY_EMP_ID= 
 			"SELECT a.* FROM EMAS.EmployeeHistory a INNER JOIN EMAS.AttributeStatus b"
@@ -36,6 +44,8 @@ public class ComplaintDAOImpl implements ComplaintDAO {
 	
 	@PersistenceContext
 	EntityManager em;
+	
+	private static final String RESPONSE_COMPLAINT = "Complete";
 
 
 	/**
@@ -87,6 +97,76 @@ public class ComplaintDAOImpl implements ComplaintDAO {
 		return list;
 	}
 	
+	@Override
+	public Date fileComplaint(ComplaintPOJO complaint) {
+
+		Date validFrom = null;
+		try{
+
+			StoredProcedureQuery q = em.createStoredProcedureQuery("CreateComplaintRequest")
+							.registerStoredProcedureParameter("spResponse", java.sql.Timestamp.class, ParameterMode.OUT)
+							.registerStoredProcedureParameter("JsonDetails", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("EmployeeFirstName", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("EmployeeLastName", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("ModifiedByFirstName", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("ModifiedByLastName", String.class, ParameterMode.IN);
+			
+			q.setParameter("JsonDetails", complaint.getJsonDetails());
+			q.setParameter("EmployeeFirstName", complaint.getEmployeeFirstName());
+			q.setParameter("EmployeeLastName", complaint.getEmployeeLastName());
+			q.setParameter("ModifiedByFirstName", complaint.getModifiedByFirstName());
+			q.setParameter("ModifiedByLastName", complaint.getModifiedByLastName());
+
+			 q.execute();
+			 
+			 java.sql.Timestamp ts = (java.sql.Timestamp) q.getOutputParameterValue("spResponse");
+			 
+			 validFrom = new Date(ts.getTime());
+
+		}catch(Exception e){
+			logger.error(e.getMessage());
+		}
+		
+		return validFrom;
+		
+	}
+	
+	/**
+	 * completing a review.
+	 * Response status label should be completed
+	 */
+	@Override
+	public Date responseComplaint(ComplaintPOJO complaint) {
+		Date validFrom = null;
+		try{
+
+			StoredProcedureQuery q = em.createStoredProcedureQuery("CreateComplaintResponse")
+							.registerStoredProcedureParameter("spResponse", java.sql.Timestamp.class, ParameterMode.OUT)
+							.registerStoredProcedureParameter("ResponseStatusLabel", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("JsonDetails", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("EmployeeFirstName", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("EmployeeLastName", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("ModifiedByFirstName", String.class, ParameterMode.IN)
+							.registerStoredProcedureParameter("ModifiedByLastName", String.class, ParameterMode.IN);
+			
+			q.setParameter("ResponseStatusLabel",RESPONSE_COMPLAINT);
+			q.setParameter("JsonDetails", complaint.getJsonDetails());
+			q.setParameter("EmployeeFirstName", complaint.getEmployeeFirstName());
+			q.setParameter("EmployeeLastName", complaint.getEmployeeLastName());
+			q.setParameter("ModifiedByFirstName", complaint.getModifiedByFirstName());
+			q.setParameter("ModifiedByLastName", complaint.getModifiedByLastName());
+
+			 q.execute();
+			 
+			 validFrom = (Date) q.getOutputParameterValue("spResponse");
+
+		}catch(Exception e){
+			logger.error(e.getMessage());
+		}
+		
+		return validFrom;
+	}
+
 	
 
 }

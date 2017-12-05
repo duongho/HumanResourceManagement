@@ -21,6 +21,8 @@ public interface EmployeeService {
 	boolean  quitEmployee(int empId);
 	
 	String recoverPassword(String username);
+
+	Employee getEmployeeByFirstandLastName(String firstName, String lastName);
 	
 	
 }

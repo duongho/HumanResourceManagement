@@ -24,5 +24,7 @@ public interface EmployeeDAO {
 	Employee getEmployeeByUserName (String userName);
 	
 	State getStateByName (String name);
-	
+
+	Employee getEmployeeByFirstandLastName(String firstName, String lastName);
+
 }
