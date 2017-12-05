@@ -98,7 +98,7 @@ public class Login implements java.io.Serializable {
 	}
 
 	@JsonBackReference
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "login")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "login")
 	public Set<Employee> getEmployees() {
 		return this.employees;
 	}
