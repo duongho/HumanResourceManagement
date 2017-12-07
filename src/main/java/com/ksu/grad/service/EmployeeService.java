@@ -23,6 +23,7 @@ public interface EmployeeService {
 	String recoverPassword(String username);
 
 	Employee getEmployeeByFirstandLastName(String firstName, String lastName);
+	Employee getEmployeeByUsername(String username);
 	
 	
 }

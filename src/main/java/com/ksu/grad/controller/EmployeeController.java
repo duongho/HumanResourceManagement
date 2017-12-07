@@ -99,6 +99,15 @@ public class EmployeeController {
 		}
 		return new ResponseEntity<Employee>(emp, HttpStatus.OK);    	
     }
+    @RequestMapping(value="/find/{username}", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<Employee>  findEmployeebyUsername(@PathVariable("username") String username){
+		Employee emp = empService.getEmployeeByUsername(username);
+		if(emp==null) {
+			return new ResponseEntity<Employee>(emp, HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<Employee>(emp, HttpStatus.OK);    	
+    }
     
     
  

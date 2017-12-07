@@ -193,6 +193,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 		Employee empObj = employeeDAO.getEmployeeByFirstandLastName(firstName, lastName);
 		return empObj;
 	}
+
+	@Override
+	public Employee getEmployeeByUsername(String username) {
+		Employee empObj = employeeDAO.getEmployeeByUserName(username);
+		return empObj;
+	}
 	
 
 }
